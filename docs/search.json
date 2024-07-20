@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "LegoSetPrices.html",
+    "href": "LegoSetPrices.html",
+    "title": "Lego set prices",
+    "section": "",
+    "text": "Almost everyone is familiar with Lego, the popular construction toy with interlocking brightly coloured plastic bricks. In the last two decades, the Lego marketing has not only focused on children, but also on adults, with more intricate and detailed sets becoming available. Everyone who has a Lego fan at home (be it a child or an adult) will know of the sometimes hefty price ranges, especially for sets that are under an intellectual property license (think of Star Wars, Marvel, Minecraft, etc.).\nThanks to the R package brickset I was able to collect data on all Lego sets released during a certain year, containing statistics such as the theme, intellectual property license, number of pieces, retail price, etc. Exploring this dataset I was curious if I could find an answer to the following questions:"
+  },
+  {
+    "objectID": "LegoSetPrices.html#packages-used",
+    "href": "LegoSetPrices.html#packages-used",
+    "title": "Lego set prices",
+    "section": "1 Packages used",
+    "text": "1 Packages used\n\nlibrary(brickset)\nlibrary(tidyverse)"
+  },
+  {
+    "objectID": "LegoSetPrices.html#obtaining-data-on-all-lego-sets-released-from-2018-to-2024",
+    "href": "LegoSetPrices.html#obtaining-data-on-all-lego-sets-released-from-2018-to-2024",
+    "title": "Lego set prices",
+    "section": "2 Obtaining data on all Lego sets released from 2018 to 2024",
+    "text": "2 Obtaining data on all Lego sets released from 2018 to 2024\nThe getSets function from the brickset package interfaces with the API on the Brickset website (an active account is required) and returns a data frame containing all Lego sets released for a specified year. Initially, I was planning to create a database with all sets released in the last 5 years (i.e. 2019-2024), however, since I was hesitant of potential COVID-19 related effects (production lags, delayed set releases, …), I instead opted for the 2018-2024 period (July 2024 at the time of writing) to have a good amount of pre- and post-COVID-19 data. The combined data frame is available as Lego_sets_18to24.csv\n\ndf_sets_18to24 &lt;- read_csv(\"Lego_sets_18to24.csv\")\nglimpse(df_sets_18to24)\n## Rows: 6,085\n## Columns: 36\n## $ setID                 &lt;dbl&gt; 27724, 27828, 27829, 27830, 28316, 27454, 27455,…\n## $ number                &lt;chr&gt; \"10260\", \"10261\", \"10262\", \"10263\", \"10268\", \"10…\n## $ numberVariant         &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …\n## $ name                  &lt;chr&gt; \"Downtown Diner\", \"Roller Coaster\", \"James Bond …\n## $ year                  &lt;dbl&gt; 2018, 2018, 2018, 2018, 2018, 2018, 2018, 2018, …\n## $ theme                 &lt;chr&gt; \"Creator Expert\", \"Creator Expert\", \"Creator Exp…\n## $ themeGroup            &lt;chr&gt; \"Model making\", \"Model making\", \"Model making\", …\n## $ subtheme              &lt;chr&gt; \"Modular Buildings Collection\", \"Fairground Coll…\n## $ category              &lt;chr&gt; \"Normal\", \"Normal\", \"Normal\", \"Normal\", \"Normal\"…\n## $ released              &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …\n## $ pieces                &lt;dbl&gt; 2480, 4124, 1290, 1166, 826, 85, 186, 295, 579, …\n## $ minifigs              &lt;dbl&gt; 6, 11, NA, 8, 3, NA, 1, 2, 2, 3, NA, NA, NA, NA,…\n## $ bricksetURL           &lt;chr&gt; \"https://brickset.com/sets/10260-1\", \"https://br…\n## $ rating                &lt;dbl&gt; 4.3, 4.3, 4.2, 3.9, 4.0, 3.7, 3.9, 3.8, 4.0, 4.1…\n## $ reviewCount           &lt;dbl&gt; 7, 5, 10, 1, 3, 3, 2, 0, 2, 2, 1, 1, 2, 1, 1, 0,…\n## $ packagingType         &lt;chr&gt; \"Box\", \"Box\", \"Box\", \"Box\", \"Box\", \"Box\", \"Box\",…\n## $ availability          &lt;chr&gt; \"LEGO exclusive\", \"LEGO exclusive\", \"LEGO exclus…\n## $ agerange_min          &lt;dbl&gt; 16, 16, NA, 12, 12, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4…\n## $ thumbnailURL          &lt;chr&gt; \"https://images.brickset.com/sets/small/10260-1.…\n## $ imageURL              &lt;chr&gt; \"https://images.brickset.com/sets/images/10260-1…\n## $ US_retailPrice        &lt;dbl&gt; 169.99, 379.99, 149.99, 99.99, 199.99, 4.99, 9.9…\n## $ US_dateFirstAvailable &lt;dttm&gt; 2018-01-01, 2018-06-02, 2018-08-01, 2018-10-02,…\n## $ US_dateLastAvailable  &lt;dttm&gt; 2020-11-24, 2021-11-20, 2022-01-27, 2020-11-20,…\n## $ UK_retailPrice        &lt;dbl&gt; 129.99, 299.99, 129.99, 84.99, 159.99, 4.99, 8.9…\n## $ UK_dateFirstAvailable &lt;dttm&gt; 2018-01-01, 2018-06-02, 2018-08-01, 2018-10-02,…\n## $ UK_dateLastAvailable  &lt;dttm&gt; 2020-11-04, 2021-11-07, 2021-08-02, 2021-03-02,…\n## $ CA_retailPrice        &lt;dbl&gt; 219.99, 479.99, 179.99, 129.99, 249.99, 5.99, 12…\n## $ CA_dateFirstAvailable &lt;dttm&gt; 2018-01-01, 2018-06-02, 2018-08-01, 2018-10-02,…\n## $ CA_dateLastAvailable  &lt;dttm&gt; 2020-11-24, 2021-11-20, 2022-01-27, 2020-11-20,…\n## $ DE_retailPrice        &lt;dbl&gt; 149.99, 329.99, 149.99, 87.72, 175.45, 4.99, 9.9…\n## $ DE_dateFirstAvailable &lt;dttm&gt; 2018-02-02, 2018-06-02, 2018-08-01, 2018-10-02,…\n## $ DE_dateLastAvailable  &lt;dttm&gt; 2020-11-05, 2021-11-15, 2021-08-04, 2020-12-11,…\n## $ height                &lt;dbl&gt; 37.5, 48.6, 28.2, 28.0, 47.5, 9.1, 14.1, 19.1, 2…\n## $ width                 &lt;dbl&gt; 58.0, 58.1, 48.0, 47.7, 37.5, 12.2, 15.7, 26.2, …\n## $ depth                 &lt;dbl&gt; 9.80, 18.60, 9.10, 8.70, 10.70, 5.90, 6.10, 4.60…\n## $ weight                &lt;dbl&gt; NA, 5.800, NA, 1.365, 2.156, NA, NA, NA, NA, NA,…"
+  },
+  {
+    "objectID": "LegoSetPrices.html#cleaning-the-dataset",
+    "href": "LegoSetPrices.html#cleaning-the-dataset",
+    "title": "Lego set prices",
+    "section": "3 Cleaning the dataset",
+    "text": "3 Cleaning the dataset\nYou can see that the dataframe has a total of 36 columns with an abundance of information that I’m not interested in for this analysis. So to make life a little easier, I will only select the columns setID, number, name, year, theme, themeGroup, subtheme, category, released, pieces, and DE_retailPrice (as I’m in the European Union, I opted for prices in Euro).\n\ndf_sets_18to24 &lt;- read_csv(\"Lego_sets_18to24.csv\") %&gt;%\n  select(setID, number, name, year, theme, themeGroup, subtheme, category, released, pieces, DE_retailPrice)\nhead(df_sets_18to24, n = 5)\n\n\n\nTable 1: First 5 columns of sets_18to24\n\n\n\n\n  \n\n\n\n\n\n\nTo make things easier later on, any NAs in subtheme are filled in by the value of the column themeGroup:\n\ndf_sets_18to24$subtheme &lt;- ifelse(is.na(df_sets_18to24$subtheme) == T,\n                                  df_sets_18to24$themeGroup,\n                                  df_sets_18to24$subtheme)\n\nWhile exploring the data further, it seems that the intelectual property license information is spread over the columns themeGroup or subtheme, with no overlap between the two. As I want to be able to make an easy distinction between licensed and not-licensed, the new column License is created which contains this information. Additionally, the following filters are applied:\n\npieces cannot be NA, and is cut-off at 10, because these very small sets are often expansion sets such as base plates, road plates, rails, etc.\nDE_retailPrice cannot be NA.\nAs I only focus on actual Lego sets, theme cannot be “Duplo”, and category cannot be “Book”.\nreleased equals TRUE.\n\nAnd finally, the column Price-to-part ratio is added, which is simply DE_retalPrice divided by pieces.\n\ndf_sets_18to24_filt &lt;- df_sets_18to24 %&gt;%\n  filter(is.na(pieces) == FALSE,\n         pieces &gt; 10,\n         is.na(DE_retailPrice) == FALSE,\n         theme != \"Duplo\",\n         category != \"Book\",\n         released == TRUE\n         ) %&gt;%\n  mutate(\"License\" = ifelse(themeGroup == \"Licensed\"|subtheme == \"Licensed\",\n                            \"Licensed\",\n                            \"No license\"),\n         \"Price-to-part ratio\" = round(DE_retailPrice/pieces, 2))\n\nhead(df_sets_18to24_filt, n = 5)\n\n\n\nTable 2: First 5 columns of sets_18to24_filt\n\n\n\n\n  \n\n\n\n\n\n\n\ndf_sets_18to24_filt$year &lt;- factor(df_sets_18to24_filt$year)"
+  },
+  {
+    "objectID": "LegoSetPrices.html#visually-exploring-the-data",
+    "href": "LegoSetPrices.html#visually-exploring-the-data",
+    "title": "Lego set prices",
+    "section": "4 Visually exploring the data",
+    "text": "4 Visually exploring the data\n\n4.1 Number of sets released each year\n\ndf_release_yr &lt;- df_sets_18to24_filt %&gt;%\n  group_by(year) %&gt;%\n  summarise(\"n_sets\" = n())\n\nggplot(df_release_yr) +\n  geom_line(aes(x = year, y = n_sets)) +\n  coord_cartesian(ylim = c(0, 390))\n\n`geom_line()`: Each group consists of only one observation.\nℹ Do you need to adjust the group aesthetic?\n\n\n\n\n\n\n\n\n\n\nggplot(df_sets_18to24_filt) +\n  geom_boxplot(aes(x = year, y = pieces)) +\n  scale_y_continuous(trans = \"log10\")\n\n\n\n\n\n\n\nggplot(df_sets_18to24_filt) +\n  geom_boxplot(aes(x = year, y = DE_retailPrice)) +\n    scale_y_continuous(trans = \"log10\")\n\n\n\n\n\n\n\nggplot(df_sets_18to24_filt) +\n  geom_point(aes(x = pieces, y = DE_retailPrice, color = License)) +\n  geom_smooth(aes(x = pieces, y = DE_retailPrice), formula = y ~ x - 1, method = \"lm\") +\n  geom_smooth(aes(x = pieces, y = DE_retailPrice, color = License), formula = y ~ x - 1, method = \"lm\")\n\n\n\n\n\n\n\nlm(DE_retailPrice ~ pieces - 1, data = df_sets_18to24_filt) %&gt;% summary()\n\n\nCall:\nlm(formula = DE_retailPrice ~ pieces - 1, data = df_sets_18to24_filt)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-736.90   -0.43    5.35   14.11  436.71 \n\nCoefficients:\n        Estimate Std. Error t value Pr(&gt;|t|)    \npieces 0.0843858  0.0006985   120.8   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 36.33 on 2528 degrees of freedom\nMultiple R-squared:  0.8524,    Adjusted R-squared:  0.8523 \nF-statistic: 1.46e+04 on 1 and 2528 DF,  p-value: &lt; 2.2e-16"
+  },
+  {
+    "objectID": "datsciexp.html",
+    "href": "datsciexp.html",
+    "title": "Data science experience",
+    "section": "",
+    "text": "In my spare time, I have done some analyses on publicly available datasets, and created some additional visualisations. Many of these project originated from news articles or media claims that sparked an interest, and for which I wanted to delve deeper into the raw data."
+  },
+  {
+    "objectID": "datsciexp.html#lego-set-prices",
+    "href": "datsciexp.html#lego-set-prices",
+    "title": "Data science experience",
+    "section": "Lego set prices",
+    "text": "Lego set prices"
+  }
+]
