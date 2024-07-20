@@ -1,10 +1,17 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "vanbaels.github.io",
+    "objectID": "DatSciExp.html",
+    "href": "DatSciExp.html",
+    "title": "Data science experience",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "In my spare time, I have done some analyses on publicly available datasets, and created some additional visualisations. Many of these project originated from news articles or media claims that sparked an interest, and for which I wanted to delve deeper into the raw data."
+  },
+  {
+    "objectID": "DatSciExp.html#lego-set-prices",
+    "href": "DatSciExp.html#lego-set-prices",
+    "title": "Data science experience",
+    "section": "Lego set prices",
+    "text": "Lego set prices"
   },
   {
     "objectID": "about.html",

@@ -3,16 +3,19 @@ project:
   output-dir: docs
 
 website:
-  title: "vanbaels.github.io"
+  title: "Sven Van Bael"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: Home
+        href: index.qmd
+      - text: CV
+      - text: Data science experience
+        href: DatSciExp.qmd
 
 format:
   html:
     theme: cosmo
+    highlight-style: vim-dark
     css: styles.css
     toc: true
 
