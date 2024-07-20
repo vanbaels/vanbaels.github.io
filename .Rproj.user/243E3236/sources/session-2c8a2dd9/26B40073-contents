@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Sven Van Bael"
+  navbar:
+    left:
+      - text: Home
+        href: index.qmd
+      - text: CV
+      - text: Data science experience
+        href: datsciexp.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+editor: visual
+
