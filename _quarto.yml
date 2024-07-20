@@ -10,12 +10,11 @@ website:
         href: index.qmd
       - text: CV
       - text: Data science experience
-        href: DatSciExp.qmd
+        href: datsciexp.qmd
 
 format:
   html:
     theme: cosmo
-    highlight-style: vim-dark
     css: styles.css
     toc: true
 

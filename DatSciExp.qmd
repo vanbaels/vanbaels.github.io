@@ -2,6 +2,6 @@
 title: "Data science experience"
 ---
 
-In my spare time, I have done some analyses on publicly available datasets, and created some additional visualisations. Many of these project originated from news articles or media claims that sparked an interest, and for which I wanted to delve deeper into [the raw data](www.google.be).
+In my spare time, I have done some analyses on publicly available datasets, and created some additional visualisations. Many of these project originated from news articles or media claims that sparked an interest, and for which I wanted to delve deeper into the raw data.
 
-## [Lego set prices](index.qmd)
+## [Lego set prices](LegoSetPrices.qmd)
