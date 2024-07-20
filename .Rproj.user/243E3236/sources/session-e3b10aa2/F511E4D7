@@ -1,9 +1,9 @@
 {
     "id": "F511E4D7",
-    "path": "C:/Users/Sven/OneDrive/Documents/vanbaels.github.io/_quarto.yml",
+    "path": "C:/Users/Sven/OneDrive/Documents/GitHub/vanbaels.github.io/_quarto.yml",
     "project_path": "_quarto.yml",
     "type": "yaml",
-    "hash": "3192815364",
+    "hash": "2472983299",
     "contents": "",
     "dirty": false,
     "created": 1721508641074.0,
@@ -11,14 +11,16 @@
     "relative_order": 2,
     "properties": {
         "source_window_id": "",
-        "Source": "Source"
+        "Source": "Source",
+        "cursorPosition": "2,18",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1721508635,
+    "lastKnownWriteTime": 1721509064,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1721508635,
+    "last_content_update": 1721509064684,
     "read_only": false,
     "read_only_alternatives": []
 }
