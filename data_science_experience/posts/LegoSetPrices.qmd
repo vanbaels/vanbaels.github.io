@@ -146,6 +146,8 @@ In @fig-sets_released you can see that the number of sets released each year is 
 ```{r}
 #| collapse: true
 #| warning: false
+#| label: fig-ptp_years
+#| fig-cap: Price-to-part ratio (in eurocent per piece) of licensed and non-licensed sets for each year.
 df_ptp_stats <- df_sets_18to24_filt %>%
   group_by(year, License) %>%
   summarize("mean PtP ratio" = mean(`Price-to-part ratio`),

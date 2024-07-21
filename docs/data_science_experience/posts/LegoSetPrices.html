@@ -533,7 +533,7 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 </figure>
 </div>
 </div>
-<p>The <code>year</code> column is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using <code>year</code> as a grouping variable, or when creating plots with <code>ggplot2</code>. Also, the <code>License</code> column is made into a factor, with the levels “No license” and “License”, in that order.</p>
+<p>The column <code>year</code> is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using <code>year</code> as a grouping variable, or when creating plots with <code>ggplot2</code>. Also, the <code>License</code> column is turned into type factor, with the ordered levels “No license” and “License”.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_sets_18to24_filt<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_sets_18to24_filt<span class="sc">$</span>year)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df_sets_18to24_filt<span class="sc">$</span>License <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_sets_18to24_filt<span class="sc">$</span>License, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No license"</span>, <span class="st">"Licensed"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -604,9 +604,14 @@ Figure&nbsp;1: Number of sets released from 2018 to 2024.
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="LegoSetPrices_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-ptp_years" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ptp_years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LegoSetPrices_files/figure-html/fig-ptp_years-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ptp_years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Price-to-part ratio (in eurocent per piece) of licensed and non-licensed sets for each year.
+</figcaption>
 </figure>
 </div>
 </div>
