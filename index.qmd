@@ -2,6 +2,7 @@
 title: "Sven Van Bael"
 
 about:
+  id: svb-summary
   template: trestles
   image: profile_img.jpg
   image-shape: round
@@ -13,4 +14,24 @@ about:
     - icon: github
       text: Github
       href: https://github.com
+---
+
+:::{#svb-summary}
+Experienced researcher with an interest in analytical techniques and data science.
+
+## Experience
+
+**Post-doctoral researcher** | University of Antwerp <br>
+*Centre for Proteomics* <br>
+Nov. 2020 - Oct. 2023
+
+**Post-doctoral researcher** | KU Leuven <br>
+*Research group of Molecular and Functional Neurobiology* <br>
+Jan. 2019 - Oct. 2023
+
+**PhD researcher** | KU Leuven <br>
+*Research group of Functional Genomics and Proteomics* <br>
+Oct. 2014 - Dec. 2018
+
+:::
 ---
