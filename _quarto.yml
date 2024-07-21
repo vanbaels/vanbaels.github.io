@@ -10,7 +10,7 @@ website:
         href: index.qmd
       - text: CV
       - text: Data science experience
-        href: datsciexp.qmd
+        href: data_science_experience/datsciexp.qmd
 
 format:
   html:

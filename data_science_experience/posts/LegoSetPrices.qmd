@@ -1,6 +1,7 @@
 ---
 title: "Lego set prices"
 author: "**Sven Van Bael**"
+date: 2024/07/21
 format: 
   html:
     number-sections: true
