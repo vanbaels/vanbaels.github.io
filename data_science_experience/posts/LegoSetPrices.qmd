@@ -100,7 +100,7 @@ df_sets_18to24_filt <- df_sets_18to24 %>%
 head(df_sets_18to24_filt, n = 5)
 ```
 
-The `year` column is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using `year` as a grouping variable, or when creating plots with `ggplot2`. Also, the `License` column is made into a factor, with the levels "No license" and "License", in that order.
+The column `year` is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using `year` as a grouping variable, or when creating plots with `ggplot2`. Also, the `License` column is turned into type factor, with the ordered levels "No license" and "License".
 
 ```{r}
 df_sets_18to24_filt$year <- factor(df_sets_18to24_filt$year)
