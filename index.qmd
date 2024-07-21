@@ -1,3 +1,16 @@
 ---
 title: "Sven Van Bael"
+
+about:
+  template: trestles
+  image: profile_img.jpg
+  image-shape: round
+  image-width: 10em
+  links:
+    - icon: globe2
+      text: ORCID
+      href: https://orcid.org/0000-0002-6948-1020
+    - icon: github
+      text: Github
+      href: https://github.com
 ---
