@@ -3,4 +3,5 @@ title: "Data science experience"
 listing:
   type: default
   contents: posts
+  max-description-length: 100
 ---
