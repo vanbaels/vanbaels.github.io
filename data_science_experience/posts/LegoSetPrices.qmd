@@ -1,26 +1,26 @@
 ---
 title: "Lego set prices"
-author: "**Sven Van Bael**"
+author: "Sven Van Bael"
 date: 2024/07/21
 format: 
   html:
     number-sections: true
-    df-print: paged
+    df-print: kable
     toc: true
 editor: visual
 ---
 
-*Almost everyone is familiar with Lego, the popular construction toy with interlocking brightly coloured plastic bricks. In the last two decades, the Lego marketing has not only focused on children, but also on adults, with more intricate and detailed sets becoming available. Everyone who has a Lego fan at home (be it a child or an adult) will know of the sometimes hefty price ranges, especially for sets that are under an intellectual property license (think of Star Wars, Marvel, Minecraft, etc.).*
+Almost everyone is familiar with Lego, the popular construction toy with interlocking brightly coloured plastic bricks. In the last two decades, the Lego marketing has not only focused on children, but also on adults, with more intricate and detailed sets becoming available. Everyone who has a Lego fan at home (be it a child, an adult, or both) will know the sometimes hefty price ranges, especially for sets that are under an intellectual property license (think of Star Wars, Marvel, Minecraft, etc.).
 
-*Thanks to the `R` package [`brickset`](https://github.com/jbryer/brickset) I was able to collect data on all Lego sets released during a certain year, containing statistics such as the theme, intellectual property license, number of pieces, retail price, etc. Exploring this dataset I was curious if I could find an answer to the following questions:*
+Thanks to the `R` package [`brickset`](https://github.com/jbryer/brickset) I was able to collect data on all Lego sets released during 2018 and 2024, including statistics such as set theme, intellectual property license, number of pieces, retail price, etc. While exploring this data set I was curious if I could find an answer to some questions:
 
--   *Are smaller sets more expensive to produce than bigger ones, i.e. is there a difference in price per piece count?*
+-   Are smaller sets more expensive to produce than bigger ones, i.e. is there a difference in price per piece count?
 
--   *Is there a big difference between intellectual property licensed sets and those that are not?*
+-   Is there a big difference between intellectual property licensed sets and those that are not?
 
--   *Which intellectual property has the most expensive Lego sets?*
+-   Which intellectual property has the most expensive Lego sets?
 
--   *Which set has the cheapest price per piece?*
+-   Which set has the cheapest price per piece?
 
 ## Packages used
 
@@ -29,11 +29,12 @@ editor: visual
 #| warning: false
 library(brickset)
 library(tidyverse)
+library(ggbeeswarm)
 ```
 
 ## Obtaining data on all Lego sets released from 2018 to 2024
 
-The `getSets` function from the `brickset` package interfaces with the API on the [Brickset](https://brickset.com/) website (an active account is required) and returns a data frame containing all Lego sets released for a specified year. Initially, I was planning to create a database with all sets released in the last 5 years (i.e. 2019-2024), however, since I was hesitant of potential COVID-19 related effects (production lags, delayed set releases, ...), I instead opted for the 2018-2024 period (July 2024 at the time of writing) to have a good amount of pre- and post-COVID-19 data. The combined data frame is available as `Lego_sets_18to24.csv`
+The `getSets` function from the `brickset` package interfaces with the API on the [Brickset](https://brickset.com/) website (an active account is required) and returns a data frame containing all Lego sets released for a specified year. Initially, I was planning to create a database with all sets released in the last 5 years (i.e. 2019-2024). However, I was hesitant of potential COVID-19 related effects (production lags, delayed set releases, ...), so I instead opted for the 2018-2024 period (July 2024 at the time of writing) to have a good amount of pre- and post-COVID-19 data. The combined data frame is available as `Lego_sets_18to24.csv`
 
 ```{r}
 #| collapse: true
@@ -44,13 +45,13 @@ glimpse(df_sets_18to24)
 
 ## Cleaning the dataset
 
-You can see that the dataframe has a total of `r ncol(df_sets_18to24)` columns with an abundance of information that I'm not interested in for this analysis. So to make life a little easier, I will only select the columns `setID`, `number`, `name`, `year`, `theme`, `themeGroup`, `subtheme`, `category`, `released`, `pieces`, and `DE_retailPrice` (as I'm in the European Union, I opted for prices in Euro).
+You can see that the dataframe has a total of `r ncol(df_sets_18to24)` columns with an abundance of information that I'm not interested in for this analysis. So to make life a little easier, I will only select the columns `setID`, `number`, `name`, `year`, `theme`, `themeGroup`, `subtheme`, `category`, `released`, `pieces`, and `DE_retailPrice` (as I'm located in Europe, I opted for prices in Euro).
 
 ```{r}
 #| collapse: true
 #| warning: false
 #| label: tbl-sets_18to24
-#| tbl-cap: First 5 columns of `sets_18to24`
+#| tbl-cap: First 5 rows of `sets_18to24`
 
 df_sets_18to24 <- read_csv("Lego_sets_18to24.csv") %>%
   select(setID, number, name, year, theme, themeGroup, subtheme, category, released, pieces, DE_retailPrice)
@@ -65,7 +66,7 @@ df_sets_18to24$subtheme <- ifelse(is.na(df_sets_18to24$subtheme) == T,
                                   df_sets_18to24$subtheme)
 ```
 
-While exploring the data further, it seems that the intelectual property license information is spread over the columns `themeGroup` or `subtheme`, with no overlap between the two. As I want to be able to make an easy distinction between licensed and not-licensed, the new column `License` is created which contains this information. Additionally, the following filters are applied:
+While exploring the data further, it seems that the information on intellectual property license is spread over the columns `themeGroup` or `subtheme`, with no overlap between the two. As I want to be able to make an easy distinction between licensed and not-licensed, the new column `License` is created which contains this information. Additionally, the following filters are applied on the data frame:
 
 -   `pieces` cannot be NA, and is cut-off at 10, because these very small sets are often expansion sets such as base plates, road plates, rails, etc.
 
@@ -73,14 +74,14 @@ While exploring the data further, it seems that the intelectual property license
 
 -   As I only focus on actual Lego sets, `theme` cannot be "Duplo", and `category` cannot be "Book".
 
--   `released` equals TRUE.
+-   `released` equals TRUE, so it only contains sets that have been released on the market.
 
-And finally, the column `Price-to-part ratio` is added, which is simply `DE_retalPrice` divided by `pieces`.
+And finally, the column `Price-to-part ratio` is added, which is calculated from `DE_retailPrice` and `pieces`.
 
 ```{r}
 #| collapse: true
 #| label: tbl-sets_18to24_filt
-#| tbl-cap: First 5 columns of `sets_18to24_filt`
+#| tbl-cap: First 5 rows of `sets_18to24_filt`
 
 df_sets_18to24_filt <- df_sets_18to24 %>%
   filter(is.na(pieces) == FALSE,
@@ -98,6 +99,8 @@ df_sets_18to24_filt <- df_sets_18to24 %>%
 head(df_sets_18to24_filt, n = 5)
 ```
 
+The `years` column is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using `year` as a grouping variable, or when creating plots with `ggplot2`.
+
 ```{r}
 df_sets_18to24_filt$year <- factor(df_sets_18to24_filt$year)
 ```
@@ -107,13 +110,47 @@ df_sets_18to24_filt$year <- factor(df_sets_18to24_filt$year)
 ### Number of sets released each year
 
 ```{r}
+#| collapse: true
+#| warning: false
+#| label: fig-sets_released
+#| fig-cap: Number of sets released from 2018 to 2024.
 df_release_yr <- df_sets_18to24_filt %>%
-  group_by(year) %>%
-  summarise("n_sets" = n())
+  group_by(year, License) %>%
+  summarise("n_sets" = n()) %>%
+  mutate("Total" = sum(n_sets)) %>%
+  pivot_wider(names_from = License, values_from = n_sets) %>%
+  pivot_longer(cols = c(Licensed, `No license`, Total), names_to = "License", values_to = "n_sets")
 
 ggplot(df_release_yr) +
-  geom_line(aes(x = year, y = n_sets)) +
-  coord_cartesian(ylim = c(0, 390))
+  geom_point(aes(x = year, y = n_sets, color = License, fill = License), pch = 21, size = 2) +
+  geom_line(aes(x = year, y = n_sets, color = License, group = License)) +
+  scale_x_discrete(name = "Year") +
+  scale_y_continuous(name = "Number of sets") +
+  coord_cartesian(ylim = c(0, 390)) +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16, color = "black"),
+        legend.position = "bottom",
+        legend.title = element_blank())
+```
+
+In @fig-sets_released you can see that the number of sets released each year is quite stable, with almost an equal number of licensed versus non-licensed sets being released. Interesting is the difference in 2020, where there is a drop in licensed sets, and an increase in the licensed ones. Not sure what the cause is of this difference here, but a good guess might be that due to COVID-19 a lot of media releases (movies, tv series, ...) have been postponed, which in turn might have resulted in the accompanying Lego sets not being released as well?
+
+```{r}
+df_ptp_stats <- df_sets_18to24_filt %>%
+  group_by(year, License) %>%
+  summarize("Mean PtP ratio" = mean(`Price-to-part ratio`))
+
+
+
+ggplot(df_sets_18to24_filt) +
+  geom_quasirandom(aes(x = year, y = `Price-to-part ratio`, color = License), dodge.width = 0.5, pch = 21) +
+  scale_y_continuous(trans = "log10") +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16, color = "black"),
+        legend.position = "bottom",
+        legend.title = element_blank())
 ```
 
 ```{r}
