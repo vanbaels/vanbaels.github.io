@@ -72,7 +72,7 @@ While exploring the data further, it seems that the information on intellectual 
 
 -   `DE_retailPrice` cannot be NA.
 
--   As I only focus on actual Lego sets, `theme` cannot be "Duplo", and `category` cannot be "Book".
+-   As I only focus on actual Lego sets, `theme` and `subtheme` cannot be "Duplo", and `category` cannot be "Book".
 
 -   `released` equals TRUE, so it only contains sets that have been released on the market.
 
@@ -88,6 +88,7 @@ df_sets_18to24_filt <- df_sets_18to24 %>%
          pieces > 10,
          is.na(DE_retailPrice) == FALSE,
          theme != "Duplo",
+         subtheme != "Duplo",
          category != "Book",
          released == TRUE
          ) %>%
@@ -99,10 +100,11 @@ df_sets_18to24_filt <- df_sets_18to24 %>%
 head(df_sets_18to24_filt, n = 5)
 ```
 
-The `years` column is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using `year` as a grouping variable, or when creating plots with `ggplot2`.
+The `year` column is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using `year` as a grouping variable, or when creating plots with `ggplot2`. Also, the `License` column is made into a factor, with the levels "No license" and "License", in that order.
 
 ```{r}
 df_sets_18to24_filt$year <- factor(df_sets_18to24_filt$year)
+df_sets_18to24_filt$License <- factor(df_sets_18to24_filt$License, levels = c("No license", "Licensed"))
 ```
 
 ## Visually exploring the data
@@ -121,6 +123,8 @@ df_release_yr <- df_sets_18to24_filt %>%
   pivot_wider(names_from = License, values_from = n_sets) %>%
   pivot_longer(cols = c(Licensed, `No license`, Total), names_to = "License", values_to = "n_sets")
 
+df_release_yr$License <- factor(df_release_yr$License, levels = c("No license", "Licensed", "Total"))
+
 ggplot(df_release_yr) +
   geom_point(aes(x = year, y = n_sets, color = License, fill = License), pch = 21, size = 2) +
   geom_line(aes(x = year, y = n_sets, color = License, group = License)) +
@@ -131,43 +135,51 @@ ggplot(df_release_yr) +
   theme(axis.title = element_text(size = 18),
         axis.text = element_text(size = 16, color = "black"),
         legend.position = "bottom",
-        legend.title = element_blank())
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14))
 ```
 
 In @fig-sets_released you can see that the number of sets released each year is quite stable, with almost an equal number of licensed versus non-licensed sets being released. Interesting is the difference in 2020, where there is a drop in licensed sets, and an increase in the licensed ones. Not sure what the cause is of this difference here, but a good guess might be that due to COVID-19 a lot of media releases (movies, tv series, ...) have been postponed, which in turn might have resulted in the accompanying Lego sets not being released as well?
 
+### Price-to-part ratio of sets over the years
+
 ```{r}
+#| collapse: true
+#| warning: false
 df_ptp_stats <- df_sets_18to24_filt %>%
   group_by(year, License) %>%
-  summarize("Mean PtP ratio" = mean(`Price-to-part ratio`))
-
-
+  summarize("mean PtP ratio" = mean(`Price-to-part ratio`),
+            "median PtP ratio" = median(`Price-to-part ratio`),
+            "sd" = sd(`Price-to-part ratio`))
 
 ggplot(df_sets_18to24_filt) +
-  geom_quasirandom(aes(x = year, y = `Price-to-part ratio`, color = License), dodge.width = 0.5, pch = 21) +
-  scale_y_continuous(trans = "log10") +
+  facet_grid(~year) +
+  geom_quasirandom(aes(x = License, y = `Price-to-part ratio`, color = License), dodge.width = 0.5, pch = 21) +
+  geom_point(data = df_ptp_stats, aes(x = License, y = `mean PtP ratio`)) +
+  geom_errorbar(data = df_ptp_stats, aes(x = License, ymin = `mean PtP ratio` - sd, ymax = `mean PtP ratio` + sd), width = 0.2) +
+  theme_classic() +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 18),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 16, color = "black"),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14),
+        strip.text = element_text(size = 14, face = "bold"))
+```
+
+```{r}
+ggplot(df_ptp_stats) +
+  geom_line(aes(x = year, y = `mean PtP ratio`, color = License, group = License)) +
+  geom_point(aes(x = year, y = `mean PtP ratio`, color = License, fill = License), pch = 21, size = 2) +
+  scale_x_discrete(name = "Year") +
+  scale_y_continuous(name = "Mean price-to-part ratio") +
+  coord_cartesian(ylim = c(0, 0.15)) +
   theme_classic() +
   theme(axis.title = element_text(size = 18),
         axis.text = element_text(size = 16, color = "black"),
         legend.position = "bottom",
-        legend.title = element_blank())
-```
-
-```{r}
-ggplot(df_sets_18to24_filt) +
-  geom_boxplot(aes(x = year, y = pieces)) +
-  scale_y_continuous(trans = "log10")
-
-ggplot(df_sets_18to24_filt) +
-  geom_boxplot(aes(x = year, y = DE_retailPrice)) +
-    scale_y_continuous(trans = "log10")
-
-ggplot(df_sets_18to24_filt) +
-  geom_point(aes(x = pieces, y = DE_retailPrice, color = License)) +
-  geom_smooth(aes(x = pieces, y = DE_retailPrice), formula = y ~ x - 1, method = "lm") +
-  geom_smooth(aes(x = pieces, y = DE_retailPrice, color = License), formula = y ~ x - 1, method = "lm")
-
-
-lm(DE_retailPrice ~ pieces - 1, data = df_sets_18to24_filt) %>% summary()
-
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14))
+  
 ```
