@@ -27,6 +27,7 @@ Thanks to the `R` package [`brickset`](https://github.com/jbryer/brickset) I was
 ```{r}
 #| collapse: true
 #| warning: false
+
 library(brickset)
 library(tidyverse)
 library(ggbeeswarm)
@@ -39,6 +40,7 @@ The `getSets` function from the `brickset` package interfaces with the API on th
 ```{r}
 #| collapse: true
 #| warning: false
+
 df_sets_18to24 <- read_csv("Lego_sets_18to24.csv")
 glimpse(df_sets_18to24)
 ```
@@ -51,7 +53,7 @@ You can see that the dataframe has a total of `r ncol(df_sets_18to24)` columns w
 #| collapse: true
 #| warning: false
 #| label: tbl-sets_18to24
-#| tbl-cap: First 5 rows of `sets_18to24`
+#| tbl-cap: First 5 rows of `sets_18to24`.
 
 df_sets_18to24 <- read_csv("Lego_sets_18to24.csv") %>%
   select(setID, number, name, year, theme, themeGroup, subtheme, category, released, pieces, DE_retailPrice)
@@ -61,6 +63,9 @@ head(df_sets_18to24, n = 5)
 To make things easier later on, any NAs in `subtheme` are filled in by the value of the column `themeGroup`:
 
 ```{r}
+#| collapse: true
+#| warning: false
+
 df_sets_18to24$subtheme <- ifelse(is.na(df_sets_18to24$subtheme) == T,
                                   df_sets_18to24$themeGroup,
                                   df_sets_18to24$subtheme)
@@ -80,8 +85,9 @@ And finally, the column `Price-to-part ratio` is added, which is calculated from
 
 ```{r}
 #| collapse: true
+#| warning: false
 #| label: tbl-sets_18to24_filt
-#| tbl-cap: First 5 rows of `sets_18to24_filt`
+#| tbl-cap: First 5 rows of `sets_18to24_filt`.
 
 df_sets_18to24_filt <- df_sets_18to24 %>%
   filter(is.na(pieces) == FALSE,
@@ -95,7 +101,7 @@ df_sets_18to24_filt <- df_sets_18to24 %>%
   mutate("License" = ifelse(themeGroup == "Licensed"|subtheme == "Licensed",
                             "Licensed",
                             "No license"),
-         "Price-to-part ratio" = round(DE_retailPrice/pieces, 2))
+         "Price-to-part ratio" = DE_retailPrice/pieces)
 
 head(df_sets_18to24_filt, n = 5)
 ```
@@ -103,6 +109,9 @@ head(df_sets_18to24_filt, n = 5)
 The column `year` is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using `year` as a grouping variable, or when creating plots with `ggplot2`. Also, the `License` column is turned into type factor, with the ordered levels "No license" and "License".
 
 ```{r}
+#| collapse: true
+#| warning: false
+
 df_sets_18to24_filt$year <- factor(df_sets_18to24_filt$year)
 df_sets_18to24_filt$License <- factor(df_sets_18to24_filt$License, levels = c("No license", "Licensed"))
 ```
@@ -112,10 +121,13 @@ df_sets_18to24_filt$License <- factor(df_sets_18to24_filt$License, levels = c("N
 ### Number of sets released each year
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show code"
 #| collapse: true
 #| warning: false
 #| label: fig-sets_released
 #| fig-cap: Number of sets released from 2018 to 2024.
+
 df_release_yr <- df_sets_18to24_filt %>%
   group_by(year, License) %>%
   summarise("n_sets" = n()) %>%
@@ -126,11 +138,13 @@ df_release_yr <- df_sets_18to24_filt %>%
 df_release_yr$License <- factor(df_release_yr$License, levels = c("No license", "Licensed", "Total"))
 
 ggplot(df_release_yr) +
-  geom_point(aes(x = year, y = n_sets, color = License, fill = License), pch = 21, size = 2) +
+  geom_point(aes(x = year, y = n_sets, color = License, fill = License), pch = 21, size = 3) +
   geom_line(aes(x = year, y = n_sets, color = License, group = License)) +
   scale_x_discrete(name = "Year") +
   scale_y_continuous(name = "Number of sets") +
   coord_cartesian(ylim = c(0, 390)) +
+  scale_color_manual(values = c("#9a1917", "#d88c0f", "#000000")) +
+  scale_fill_manual(values = c("#9a19174D", "#d88c0f4D", "#0000004D")) +
   theme_classic() +
   theme(axis.title = element_text(size = 18),
         axis.text = element_text(size = 16, color = "black"),
@@ -139,26 +153,30 @@ ggplot(df_release_yr) +
         legend.text = element_text(size = 14))
 ```
 
-In @fig-sets_released you can see that the number of sets released each year is quite stable, with almost an equal number of licensed versus non-licensed sets being released. Interesting is the difference in 2020, where there is a drop in licensed sets, and an increase in the licensed ones. Not sure what the cause is of this difference here, but a good guess might be that due to COVID-19 a lot of media releases (movies, tv series, ...) have been postponed, which in turn might have resulted in the accompanying Lego sets not being released as well?
+In @fig-sets_released you can see that the number of sets released each year is quite stable, with almost an equal number of licensed versus non-licensed sets being released. Interesting is the difference in 2020, where there is a drop in licensed sets, and an increase in the non-licensed ones. Not sure what has caused this difference here, but a good guess is thatt due to COVID-19 a lot of media releases (movies, tv series, ...) have been postponed, which in turn could have resulted in the accompanying Lego sets not being released as well?
 
-### Price-to-part ratio of sets over the years
+### Evolution of set sizes and retail prices from 2018 to 2024
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show code"
 #| collapse: true
 #| warning: false
-#| label: fig-ptp_years
-#| fig-cap: Price-to-part ratio (in eurocent per piece) of licensed and non-licensed sets for each year.
-df_ptp_stats <- df_sets_18to24_filt %>%
+#| label: fig-pieces_year
+#| fig-cap: Set piece count (axis in log scale) from 2018 to 2024.
+
+df_pieces_stats <- df_sets_18to24_filt %>%
   group_by(year, License) %>%
-  summarize("mean PtP ratio" = mean(`Price-to-part ratio`),
-            "median PtP ratio" = median(`Price-to-part ratio`),
-            "sd" = sd(`Price-to-part ratio`))
+  summarize("mean pieces" = mean(pieces),
+            "sd" = sd(pieces))
 
 ggplot(df_sets_18to24_filt) +
   facet_grid(~year) +
-  geom_quasirandom(aes(x = License, y = `Price-to-part ratio`, color = License), dodge.width = 0.5, pch = 21) +
-  geom_point(data = df_ptp_stats, aes(x = License, y = `mean PtP ratio`)) +
-  geom_errorbar(data = df_ptp_stats, aes(x = License, ymin = `mean PtP ratio` - sd, ymax = `mean PtP ratio` + sd), width = 0.2) +
+  geom_quasirandom(aes(x = License, y = pieces, color = License, fill = License), pch = 21, size = 3) +
+  geom_point(data = df_pieces_stats, aes(x = License, y = `mean pieces`), size = 3) +
+  scale_y_continuous(name = "Pieces", trans = "log10") +
+  scale_color_manual(values = c("#9a1917", "#d88c0f")) +
+  scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
   theme_classic() +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = 18),
@@ -170,18 +188,130 @@ ggplot(df_sets_18to24_filt) +
         strip.text = element_text(size = 14, face = "bold"))
 ```
 
+@fig-pieces_year shows that there is no substantial difference in piece count between licensed and non-licensed sets. Interesting is that the mean piece count of Lego sets has been increasing over the years. In 2018, the mean piece count was 404/430 for non-licensed/licensed sets respectively. By 2024, this has increased to 737/627 for non-licensed/licensed. As a consequence, mean set prizes should have also increased during that time period.
+
 ```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+#| collapse: true
+#| warning: false
+#| label: fig-retail_prices_year
+#| fig-cap: Set retail prices (axis in log scale) from 2018 to 2024.
+
+df_prices_stats <- df_sets_18to24_filt %>%
+  group_by(year, License) %>%
+  summarize("mean retail price" = mean(DE_retailPrice),
+            "sd" = sd(DE_retailPrice))
+
+ggplot(df_sets_18to24_filt) +
+  facet_grid(~year) +
+  geom_quasirandom(aes(x = License, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
+  geom_point(data = df_prices_stats, aes(x = License, y = `mean retail price`), size = 3) +
+  scale_y_continuous(name = "Retail price (EUR)", trans = "log10") +
+  scale_color_manual(values = c("#9a1917", "#d88c0f")) +
+  scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
+  theme_classic() +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 18),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 16, color = "black"),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14),
+        strip.text = element_text(size = 14, face = "bold"))
+
+```
+
+As expected, in @fig-retail_prices_year the mean retail price for sets has increased from 38.6 Euro/45.3 Euro (non-licensed/licensed) in 2018 to 64.9 Euro/66.6 Euro (non-licensed/licensed). This corresponds to the increase in set piece count seen in @fig-pieces_year.
+
+### Price-to-part ratio of sets over the years
+
+The most simple way to take into account the effect of the set piece count on the retail price is to calculate the price-to-part ratio.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+#| collapse: true
+#| warning: false
+#| label: fig-ptp_years
+#| fig-cap: Price-to-part ratio (in eurocent per piece) of licensed and non-licensed sets from 2018 to 2024.
+
+df_ptp_stats <- df_sets_18to24_filt %>%
+  group_by(year) %>%
+  mutate("mean PtP ratio - all" = mean(mean(`Price-to-part ratio`))) %>%
+  group_by(year, License) %>%
+  summarize("mean PtP ratio" = mean(`Price-to-part ratio`),
+            "median PtP ratio" = median(`Price-to-part ratio`),
+            "sd" = sd(`Price-to-part ratio`))
+
+ggplot(df_sets_18to24_filt) +
+  facet_grid(~year) +
+  geom_quasirandom(aes(x = License, y = `Price-to-part ratio`, color = License, fill = License), dodge.width = 0.5, pch = 21, size = 3) +
+  geom_point(data = df_ptp_stats, aes(x = License, y = `mean PtP ratio`), size = 3) +
+  geom_errorbar(data = df_ptp_stats, aes(x = License, ymin = `mean PtP ratio` - sd, ymax = `mean PtP ratio` + sd), width = 0.2) +
+  scale_color_manual(values = c("#9a1917", "#d88c0f")) +
+  scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
+  theme_classic() +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 18),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(size = 16, color = "black"),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.text = element_text(size = 14),
+        strip.text = element_text(size = 14, face = "bold"))
+```
+
+In general, the price-to-part ratio for licensed sets is indeed slightly higher than those of non-licensed sets, with 2018 being the only exception (@fig-ptp_years). While most values clump together, there are some outliers with price-to-part ratios going as high as 1 Euro. Let's take a closer look by filtering for sets with a price-to-part ratio higher than 0.5 Euro.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+#| collapse: false
+#| warning: false
+#| label: tbl-high_ptp_sets
+#| tbl-cap: Lego sets with a price-to-part ratio over 0.5 Euro per piece.
+
+df_high_ptp_sets <- filter(df_sets_18to24_filt, `Price-to-part ratio` > 0.5)
+df_high_ptp_sets
+```
+
+```{r}
+#| collapse: true
+#| warning: false
+
+summary(df_high_ptp_sets$License)
+summary(factor(df_high_ptp_sets$subtheme))
+```
+
+Interestingly, @tbl-high_ptp_sets contains more non-licensed sets than licensed ones (which are thought to be more expensive). When looking at the subthemes, you can see that the table contains three playmat sets, and one train track extension. These are non-standard sets with non-standard pieces, explaining the high price-to-part ratios. The same reasoning can explain the high ratios for sets of the SPIKE educational theme (aimed at learning programming to kids, contains specialized parts such as motors, sensors, etc.) and the Lego City Stuntz theme (containing flywheel-powered stunt bikes). Finally, there is the Super Mario Power-Up Pack theme, an interactive playset that combines Super Mario gameplay with Lego bricks. As these sets are both licensed and contain specialized electronic parts, it is one of the most expensive in this list, with several sets reaching 0.9 Euro per brick.
+
+When doing a deeper analysis, it could be argued that playmats, train track extensions and educational sets with expensive electronic parts should be excluded when analyzing the pricing of more standard Lego sets. For now, I will keep in mind that 21 sets have very aberrant price-to-part ratios, but that this will probably have little impact on the total of 2526 sets in `df_sets_18to24_filt`.
+
+Next, let's focus on how the mean price-to-part ratio (also shown als in @fig-ptp_years as black dots) evolves over the years for both licensed and non-licensed sets:
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show code"
+#| collapse: true
+#| warning: false
+#| label: fig-ptp_evo_years
+#| fig-cap: Evolution of the mean price-to-part ratio (in eurocent) from 2018 to 2024.
+
 ggplot(df_ptp_stats) +
   geom_line(aes(x = year, y = `mean PtP ratio`, color = License, group = License)) +
   geom_point(aes(x = year, y = `mean PtP ratio`, color = License, fill = License), pch = 21, size = 2) +
   scale_x_discrete(name = "Year") +
   scale_y_continuous(name = "Mean price-to-part ratio") +
   coord_cartesian(ylim = c(0, 0.15)) +
+  scale_color_manual(values = c("#9a1917", "#d88c0f")) +
+  scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
   theme_classic() +
   theme(axis.title = element_text(size = 18),
         axis.text = element_text(size = 16, color = "black"),
         legend.position = "bottom",
         legend.title = element_blank(),
         legend.text = element_text(size = 14))
-  
 ```
+
+In @fig-ptp_evo_years you can see that - except for 2018 - licensed sets have always been more expensive than non-licensed sets, with the difference ranging from 1.1 cents (2021) to 1.6 cents (2023). Interesting is also that both licensed and non-licensed sets follow an identical trend over the years, meaning that price increases/decreases have affected all sets, not just licensed or non-licensed. It's fair to assume that these changes are probably caused by economical factors (production costs, etc.), as this would indeed affect all sets. Prices started to rise in 2020 and peaked at 2021, and after that decreased and stabilized again. The cause of this bump is unknown, one explanation could be the effect of COVID-19 on the economy.

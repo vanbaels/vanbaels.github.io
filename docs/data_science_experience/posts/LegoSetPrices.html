@@ -159,7 +159,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#visually-exploring-the-data" id="toc-visually-exploring-the-data" class="nav-link" data-scroll-target="#visually-exploring-the-data"><span class="header-section-number">4</span> Visually exploring the data</a>
   <ul class="collapse">
   <li><a href="#number-of-sets-released-each-year" id="toc-number-of-sets-released-each-year" class="nav-link" data-scroll-target="#number-of-sets-released-each-year"><span class="header-section-number">4.1</span> Number of sets released each year</a></li>
-  <li><a href="#price-to-part-ratio-of-sets-over-the-years" id="toc-price-to-part-ratio-of-sets-over-the-years" class="nav-link" data-scroll-target="#price-to-part-ratio-of-sets-over-the-years"><span class="header-section-number">4.2</span> Price-to-part ratio of sets over the years</a></li>
+  <li><a href="#evolution-of-set-sizes-and-retail-prices-from-2018-to-2024" id="toc-evolution-of-set-sizes-and-retail-prices-from-2018-to-2024" class="nav-link" data-scroll-target="#evolution-of-set-sizes-and-retail-prices-from-2018-to-2024"><span class="header-section-number">4.2</span> Evolution of set sizes and retail prices from 2018 to 2024</a></li>
+  <li><a href="#price-to-part-ratio-of-sets-over-the-years" id="toc-price-to-part-ratio-of-sets-over-the-years" class="nav-link" data-scroll-target="#price-to-part-ratio-of-sets-over-the-years"><span class="header-section-number">4.3</span> Price-to-part ratio of sets over the years</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -270,7 +271,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="tbl-sets_18to24" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sets_18to24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: First 5 rows of <code>sets_18to24</code>
+Table&nbsp;1: First 5 rows of <code>sets_18to24</code>.
 </figcaption>
 <div aria-describedby="tbl-sets_18to24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -405,13 +406,13 @@ Table&nbsp;1: First 5 rows of <code>sets_18to24</code>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"License"</span> <span class="ot">=</span> <span class="fu">ifelse</span>(themeGroup <span class="sc">==</span> <span class="st">"Licensed"</span><span class="sc">|</span>subtheme <span class="sc">==</span> <span class="st">"Licensed"</span>,</span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Licensed"</span>,</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"No license"</span>),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Price-to-part ratio"</span> <span class="ot">=</span> <span class="fu">round</span>(DE_retailPrice<span class="sc">/</span>pieces, <span class="dv">2</span>))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Price-to-part ratio"</span> <span class="ot">=</span> DE_retailPrice<span class="sc">/</span>pieces)</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df_sets_18to24_filt, <span class="at">n =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="tbl-sets_18to24_filt" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sets_18to24_filt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
+Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>.
 </figcaption>
 <div aria-describedby="tbl-sets_18to24_filt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -463,7 +464,7 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 <td style="text-align: right;">2480</td>
 <td style="text-align: right;">149.99</td>
 <td style="text-align: left;">No license</td>
-<td style="text-align: right;">0.06</td>
+<td style="text-align: right;">0.0604798</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">27828</td>
@@ -478,7 +479,7 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 <td style="text-align: right;">4124</td>
 <td style="text-align: right;">329.99</td>
 <td style="text-align: left;">No license</td>
-<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.0800170</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">27829</td>
@@ -493,7 +494,7 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 <td style="text-align: right;">1290</td>
 <td style="text-align: right;">149.99</td>
 <td style="text-align: left;">No license</td>
-<td style="text-align: right;">0.12</td>
+<td style="text-align: right;">0.1162713</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">27830</td>
@@ -508,7 +509,7 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 <td style="text-align: right;">1166</td>
 <td style="text-align: right;">87.72</td>
 <td style="text-align: left;">No license</td>
-<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.0752316</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">28316</td>
@@ -523,7 +524,7 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 <td style="text-align: right;">826</td>
 <td style="text-align: right;">175.45</td>
 <td style="text-align: left;">No license</td>
-<td style="text-align: right;">0.21</td>
+<td style="text-align: right;">0.2124092</td>
 </tr>
 </tbody>
 </table>
@@ -544,6 +545,8 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 <section id="number-of-sets-released-each-year" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="number-of-sets-released-each-year"><span class="header-section-number">4.1</span> Number of sets released each year</h3>
 <div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_release_yr <span class="ot">&lt;-</span> df_sets_18to24_filt <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, License) <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"n_sets"</span> <span class="ot">=</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
@@ -554,17 +557,20 @@ Table&nbsp;2: First 5 rows of <code>sets_18to24_filt</code>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>df_release_yr<span class="sc">$</span>License <span class="ot">&lt;-</span> <span class="fu">factor</span>(df_release_yr<span class="sc">$</span>License, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"No license"</span>, <span class="st">"Licensed"</span>, <span class="st">"Total"</span>))</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_release_yr) <span class="sc">+</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> n_sets, <span class="at">color =</span> License, <span class="at">fill =</span> License), <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> n_sets, <span class="at">color =</span> License, <span class="at">fill =</span> License), <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> n_sets, <span class="at">color =</span> License, <span class="at">group =</span> License)) <span class="sc">+</span></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name =</span> <span class="st">"Year"</span>) <span class="sc">+</span></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Number of sets"</span>) <span class="sc">+</span></span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">390</span>)) <span class="sc">+</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a1917"</span>, <span class="st">"#d88c0f"</span>, <span class="st">"#000000"</span>)) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a19174D"</span>, <span class="st">"#d88c0f4D"</span>, <span class="st">"#0000004D"</span>)) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-sets_released" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -578,31 +584,120 @@ Figure&nbsp;1: Number of sets released from 2018 to 2024.
 </div>
 </div>
 </div>
-<p>In <a href="#fig-sets_released" class="quarto-xref">Figure&nbsp;1</a> you can see that the number of sets released each year is quite stable, with almost an equal number of licensed versus non-licensed sets being released. Interesting is the difference in 2020, where there is a drop in licensed sets, and an increase in the licensed ones. Not sure what the cause is of this difference here, but a good guess might be that due to COVID-19 a lot of media releases (movies, tv series, …) have been postponed, which in turn might have resulted in the accompanying Lego sets not being released as well?</p>
+<p>In <a href="#fig-sets_released" class="quarto-xref">Figure&nbsp;1</a> you can see that the number of sets released each year is quite stable, with almost an equal number of licensed versus non-licensed sets being released. Interesting is the difference in 2020, where there is a drop in licensed sets, and an increase in the non-licensed ones. Not sure what has caused this difference here, but a good guess is thatt due to COVID-19 a lot of media releases (movies, tv series, …) have been postponed, which in turn could have resulted in the accompanying Lego sets not being released as well?</p>
 </section>
-<section id="price-to-part-ratio-of-sets-over-the-years" class="level3" data-number="4.2">
-<h3 data-number="4.2" class="anchored" data-anchor-id="price-to-part-ratio-of-sets-over-the-years"><span class="header-section-number">4.2</span> Price-to-part ratio of sets over the years</h3>
+<section id="evolution-of-set-sizes-and-retail-prices-from-2018-to-2024" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="evolution-of-set-sizes-and-retail-prices-from-2018-to-2024"><span class="header-section-number">4.2</span> Evolution of set sizes and retail prices from 2018 to 2024</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_ptp_stats <span class="ot">&lt;-</span> df_sets_18to24_filt <span class="sc">%&gt;%</span></span>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_pieces_stats <span class="ot">&lt;-</span> df_sets_18to24_filt <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, License) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"mean PtP ratio"</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>),</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"median PtP ratio"</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>),</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sd"</span> <span class="ot">=</span> <span class="fu">sd</span>(<span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sets_18to24_filt) <span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> <span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>, <span class="at">color =</span> License), <span class="at">dodge.width =</span> <span class="fl">0.5</span>, <span class="at">pch =</span> <span class="dv">21</span>) <span class="sc">+</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> df_ptp_stats, <span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span>)) <span class="sc">+</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">data =</span> df_ptp_stats, <span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">ymin =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span> <span class="sc">-</span> sd, <span class="at">ymax =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span> <span class="sc">+</span> sd), <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"mean pieces"</span> <span class="ot">=</span> <span class="fu">mean</span>(pieces),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sd"</span> <span class="ot">=</span> <span class="fu">sd</span>(pieces))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sets_18to24_filt) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> pieces, <span class="at">color =</span> License, <span class="at">fill =</span> License), <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> df_pieces_stats, <span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> <span class="st">`</span><span class="at">mean pieces</span><span class="st">`</span>), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Pieces"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a1917"</span>, <span class="st">"#d88c0f"</span>)) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a19174D"</span>, <span class="st">"#d88c0f4D"</span>)) <span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-pieces_year" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pieces_year-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LegoSetPrices_files/figure-html/fig-pieces_year-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pieces_year-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Set piece count (axis in log scale) from 2018 to 2024.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-pieces_year" class="quarto-xref">Figure&nbsp;2</a> shows that there is no substantial difference in piece count between licensed and non-licensed sets. Interesting is that the mean piece count of Lego sets has been increasing over the years. In 2018, the mean piece count was 404/430 for non-licensed/licensed sets respectively. By 2024, this has increased to 737/627 for non-licensed/licensed. As a consequence, mean set prizes should have also increased during that time period.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_prices_stats <span class="ot">&lt;-</span> df_sets_18to24_filt <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, License) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"mean retail price"</span> <span class="ot">=</span> <span class="fu">mean</span>(DE_retailPrice),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sd"</span> <span class="ot">=</span> <span class="fu">sd</span>(DE_retailPrice))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sets_18to24_filt) <span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> DE_retailPrice, <span class="at">color =</span> License, <span class="at">fill =</span> License), <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> df_prices_stats, <span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> <span class="st">`</span><span class="at">mean retail price</span><span class="st">`</span>), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Retail price (EUR)"</span>, <span class="at">trans =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a1917"</span>, <span class="st">"#d88c0f"</span>)) <span class="sc">+</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a19174D"</span>, <span class="st">"#d88c0f4D"</span>)) <span class="sc">+</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-retail_prices_year" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-retail_prices_year-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LegoSetPrices_files/figure-html/fig-retail_prices_year-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-retail_prices_year-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Set retail prices (axis in log scale) from 2018 to 2024.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>As expected, in <a href="#fig-retail_prices_year" class="quarto-xref">Figure&nbsp;3</a> the mean retail price for sets has increased from 38.6 Euro/45.3 Euro (non-licensed/licensed) in 2018 to 64.9 Euro/66.6 Euro (non-licensed/licensed). This corresponds to the increase in set piece count seen in <a href="#fig-pieces_year" class="quarto-xref">Figure&nbsp;2</a>.</p>
+</section>
+<section id="price-to-part-ratio-of-sets-over-the-years" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="price-to-part-ratio-of-sets-over-the-years"><span class="header-section-number">4.3</span> Price-to-part ratio of sets over the years</h3>
+<p>The most simple way to take into account the effect of the set piece count on the retail price is to calculate the price-to-part ratio.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_ptp_stats <span class="ot">&lt;-</span> df_sets_18to24_filt <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"mean PtP ratio - all"</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">mean</span>(<span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, License) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"mean PtP ratio"</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"median PtP ratio"</span> <span class="ot">=</span> <span class="fu">median</span>(<span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sd"</span> <span class="ot">=</span> <span class="fu">sd</span>(<span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_sets_18to24_filt) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> <span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span>, <span class="at">color =</span> License, <span class="at">fill =</span> License), <span class="at">dodge.width =</span> <span class="fl">0.5</span>, <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> df_ptp_stats, <span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">y =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span>), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">data =</span> df_ptp_stats, <span class="fu">aes</span>(<span class="at">x =</span> License, <span class="at">ymin =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span> <span class="sc">-</span> sd, <span class="at">ymax =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span> <span class="sc">+</span> sd), <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a1917"</span>, <span class="st">"#d88c0f"</span>)) <span class="sc">+</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a19174D"</span>, <span class="st">"#d88c0f4D"</span>)) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <div id="fig-ptp_years" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -610,33 +705,427 @@ Figure&nbsp;1: Number of sets released from 2018 to 2024.
 <img src="LegoSetPrices_files/figure-html/fig-ptp_years-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ptp_years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Price-to-part ratio (in eurocent per piece) of licensed and non-licensed sets for each year.
+Figure&nbsp;4: Price-to-part ratio (in eurocent per piece) of licensed and non-licensed sets from 2018 to 2024.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>In general, the price-to-part ratio for licensed sets is indeed slightly higher than those of non-licensed sets, with 2018 being the only exception (<a href="#fig-ptp_years" class="quarto-xref">Figure&nbsp;4</a>). While most values clump together, there are some outliers with price-to-part ratios going as high as 1 Euro. Let’s take a closer look by filtering for sets with a price-to-part ratio higher than 0.5 Euro.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_ptp_stats) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span>, <span class="at">color =</span> License, <span class="at">group =</span> License)) <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span>, <span class="at">color =</span> License, <span class="at">fill =</span> License), <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name =</span> <span class="st">"Year"</span>) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Mean price-to-part ratio"</span>) <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>)) <span class="sc">+</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_high_ptp_sets <span class="ot">&lt;-</span> <span class="fu">filter</span>(df_sets_18to24_filt, <span class="st">`</span><span class="at">Price-to-part ratio</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_high_ptp_sets</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div id="tbl-high_ptp_sets" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-high_ptp_sets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Lego sets with a price-to-part ratio over 0.5 Euro per piece.
+</figcaption>
+<div aria-describedby="tbl-high_ptp_sets-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="LegoSetPrices_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<div class="kable-table">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 18%">
+<col style="width: 3%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 4%">
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">setID</th>
+<th style="text-align: left;">number</th>
+<th style="text-align: left;">name</th>
+<th style="text-align: left;">year</th>
+<th style="text-align: left;">theme</th>
+<th style="text-align: left;">themeGroup</th>
+<th style="text-align: left;">subtheme</th>
+<th style="text-align: left;">category</th>
+<th style="text-align: left;">released</th>
+<th style="text-align: right;">pieces</th>
+<th style="text-align: right;">DE_retailPrice</th>
+<th style="text-align: left;">License</th>
+<th style="text-align: right;">Price-to-part ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">27918</td>
+<td style="text-align: left;">60205</td>
+<td style="text-align: left;">Tracks</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Trains</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">19.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.9995000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">28133</td>
+<td style="text-align: left;">853840</td>
+<td style="text-align: left;">Road Playmat</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: left;">Xtra</td>
+<td style="text-align: left;">Miscellaneous</td>
+<td style="text-align: left;">Playmats</td>
+<td style="text-align: left;">Extended</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.7263636</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">28134</td>
+<td style="text-align: left;">853841</td>
+<td style="text-align: left;">Sea Playmat</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: left;">Xtra</td>
+<td style="text-align: left;">Miscellaneous</td>
+<td style="text-align: left;">Playmats</td>
+<td style="text-align: left;">Extended</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">7.79</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.7081818</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">28135</td>
+<td style="text-align: left;">853842</td>
+<td style="text-align: left;">Park Playmat</td>
+<td style="text-align: left;">2018</td>
+<td style="text-align: left;">Xtra</td>
+<td style="text-align: left;">Miscellaneous</td>
+<td style="text-align: left;">Playmats</td>
+<td style="text-align: left;">Extended</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.7263636</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">29208</td>
+<td style="text-align: left;">45678</td>
+<td style="text-align: left;">SPIKE Prime Set</td>
+<td style="text-align: left;">2020</td>
+<td style="text-align: left;">Education</td>
+<td style="text-align: left;">Educational</td>
+<td style="text-align: left;">SPIKE</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">528</td>
+<td style="text-align: right;">464.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.8806629</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">30333</td>
+<td style="text-align: left;">71370</td>
+<td style="text-align: left;">Fire Mario Power-Up Pack</td>
+<td style="text-align: left;">2020</td>
+<td style="text-align: left;">Super Mario</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: left;">Power-Up Pack</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">9.99</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: right;">0.9081818</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30334</td>
+<td style="text-align: left;">71371</td>
+<td style="text-align: left;">Propeller Mario Power-Up Pack</td>
+<td style="text-align: left;">2020</td>
+<td style="text-align: left;">Super Mario</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: left;">Power-Up Pack</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">9.99</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: right;">0.7684615</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">30335</td>
+<td style="text-align: left;">71372</td>
+<td style="text-align: left;">Cat Mario Power-Up Pack</td>
+<td style="text-align: left;">2020</td>
+<td style="text-align: left;">Super Mario</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: left;">Power-Up Pack</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">9.99</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: right;">0.9081818</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">31814</td>
+<td style="text-align: left;">45345</td>
+<td style="text-align: left;">SPIKE Essential Set</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">Education</td>
+<td style="text-align: left;">Educational</td>
+<td style="text-align: left;">SPIKE</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">442</td>
+<td style="text-align: right;">354.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.8031448</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">31343</td>
+<td style="text-align: left;">60296</td>
+<td style="text-align: left;">Wheelie Stunt Bike</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.5707143</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">31344</td>
+<td style="text-align: left;">60297</td>
+<td style="text-align: left;">Demolition Stunt Bike</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.6658333</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">31345</td>
+<td style="text-align: left;">60298</td>
+<td style="text-align: left;">Rocket Stunt Bike</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.5707143</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">31463</td>
+<td style="text-align: left;">60309</td>
+<td style="text-align: left;">Selfie Stunt Bike</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.5707143</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">31467</td>
+<td style="text-align: left;">60311</td>
+<td style="text-align: left;">Fire Stunt Bike</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.7263636</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">30798</td>
+<td style="text-align: left;">71384</td>
+<td style="text-align: left;">Penguin Mario Power-Up Pack</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">Super Mario</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: left;">Power-Up Pack</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">9.99</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: right;">0.5550000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">30799</td>
+<td style="text-align: left;">71385</td>
+<td style="text-align: left;">Tanooki Mario Power-Up Pack</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">Super Mario</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: left;">Power-Up Pack</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">9.99</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: right;">0.7684615</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">31315</td>
+<td style="text-align: left;">71392</td>
+<td style="text-align: left;">Frog Mario Power-Up Pack</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">Super Mario</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: left;">Power-Up Pack</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">9.99</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: right;">0.9081818</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">31316</td>
+<td style="text-align: left;">71393</td>
+<td style="text-align: left;">Bee Mario Power-Up Pack</td>
+<td style="text-align: left;">2021</td>
+<td style="text-align: left;">Super Mario</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: left;">Power-Up Pack</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">9.99</td>
+<td style="text-align: left;">Licensed</td>
+<td style="text-align: right;">0.7684615</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">33667</td>
+<td style="text-align: left;">60332</td>
+<td style="text-align: left;">Reckless Scorpion Stunt Bike</td>
+<td style="text-align: left;">2022</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.5326667</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">33668</td>
+<td style="text-align: left;">60333</td>
+<td style="text-align: left;">Bathtub Stunt Bike</td>
+<td style="text-align: left;">2022</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.5707143</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">34279</td>
+<td style="text-align: left;">60358</td>
+<td style="text-align: left;">Cyber Stunt Bike</td>
+<td style="text-align: left;">2023</td>
+<td style="text-align: left;">City</td>
+<td style="text-align: left;">Modern day</td>
+<td style="text-align: left;">Stuntz</td>
+<td style="text-align: left;">Normal</td>
+<td style="text-align: left;">TRUE</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">7.99</td>
+<td style="text-align: left;">No license</td>
+<td style="text-align: right;">0.6146154</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(df_high_ptp_sets<span class="sc">$</span>License)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="do">## No license   Licensed </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="do">##         14          7</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">factor</span>(df_high_ptp_sets<span class="sc">$</span>subtheme))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="do">##      Playmats Power-Up Pack         SPIKE        Stuntz        Trains </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="do">##             3             7             2             8             1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Interestingly, <a href="#tbl-high_ptp_sets" class="quarto-xref">Table&nbsp;3</a> contains more non-licensed sets than licensed ones (which are thought to be more expensive). When looking at the subthemes, you can see that the table contains three playmat sets, and one train track extension. These are non-standard sets with non-standard pieces, explaining the high price-to-part ratios. The same reasoning can explain the high ratios for sets of the SPIKE educational theme (aimed at learning programming to kids, contains specialized parts such as motors, sensors, etc.) and the Lego City Stuntz theme (containing flywheel-powered stunt bikes). Finally, there is the Super Mario Power-Up Pack theme, an interactive playset that combines Super Mario gameplay with Lego bricks. As these sets are both licensed and contain specialized electronic parts, it is one of the most expensive in this list, with several sets reaching 0.9 Euro per brick.</p>
+<p>When doing a deeper analysis, it could be argued that playmats, train track extensions and educational sets with expensive electronic parts should be excluded when analyzing the pricing of more standard Lego sets. For now, I will keep in mind that 21 sets have very aberrant price-to-part ratios, but that this will probably have little impact on the total of 2526 sets in <code>df_sets_18to24_filt</code>.</p>
+<p>Next, let’s focus on how the mean price-to-part ratio (also shown als in <a href="#fig-ptp_years" class="quarto-xref">Figure&nbsp;4</a> as black dots) evolves over the years for both licensed and non-licensed sets:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_ptp_stats) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span>, <span class="at">color =</span> License, <span class="at">group =</span> License)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> <span class="st">`</span><span class="at">mean PtP ratio</span><span class="st">`</span>, <span class="at">color =</span> License, <span class="at">fill =</span> License), <span class="at">pch =</span> <span class="dv">21</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">name =</span> <span class="st">"Year"</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">"Mean price-to-part ratio"</span>) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>)) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a1917"</span>, <span class="st">"#d88c0f"</span>)) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#9a19174D"</span>, <span class="st">"#d88c0f4D"</span>)) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-ptp_evo_years" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ptp_evo_years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="LegoSetPrices_files/figure-html/fig-ptp_evo_years-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ptp_evo_years-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Evolution of the mean price-to-part ratio (in eurocent) from 2018 to 2024.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>In <a href="#fig-ptp_evo_years" class="quarto-xref">Figure&nbsp;5</a> you can see that - except for 2018 - licensed sets have always been more expensive than non-licensed sets, with the difference ranging from 1.1 cents (2021) to 1.6 cents (2023). Interesting is also that both licensed and non-licensed sets follow an identical trend over the years, meaning that price increases/decreases have affected all sets, not just licensed or non-licensed. It’s fair to assume that these changes are probably caused by economical factors (production costs, etc.), as this would indeed affect all sets. Prices started to rise in 2020 and peaked at 2021, and after that decreased and stabilized again. The cause of this bump is unknown, one explanation could be the effect of COVID-19 on the economy.</p>
 
 
 </section>
