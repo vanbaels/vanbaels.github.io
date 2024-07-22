@@ -139,7 +139,7 @@ df_release_yr$License <- factor(df_release_yr$License, levels = c("No license", 
 
 ggplot(df_release_yr) +
   geom_point(aes(x = year, y = n_sets, color = License, fill = License), pch = 21, size = 3) +
-  geom_line(aes(x = year, y = n_sets, color = License, group = License)) +
+  geom_line(aes(x = year, y = n_sets, color = License, group = License), linewidth = 1) +
   scale_x_discrete(name = "Year") +
   scale_y_continuous(name = "Number of sets") +
   coord_cartesian(ylim = c(0, 390)) +
@@ -299,8 +299,8 @@ Next, let's focus on how the mean price-to-part ratio (also shown als in @fig-pt
 #| fig-cap: Evolution of the mean price-to-part ratio (in eurocent) from 2018 to 2024.
 
 ggplot(df_ptp_stats) +
-  geom_line(aes(x = year, y = `mean PtP ratio`, color = License, group = License)) +
-  geom_point(aes(x = year, y = `mean PtP ratio`, color = License, fill = License), pch = 21, size = 2) +
+  geom_line(aes(x = year, y = `mean PtP ratio`, color = License, group = License), linewidth = 1) +
+  geom_point(aes(x = year, y = `mean PtP ratio`, color = License, fill = License), pch = 21, size = 3) +
   scale_x_discrete(name = "Year") +
   scale_y_continuous(name = "Mean price-to-part ratio") +
   coord_cartesian(ylim = c(0, 0.15)) +
