@@ -1,5 +1,5 @@
 ---
-title: "Data science experience"
+title: "Personal data science projects"
 listing:
   type: default
   contents: posts

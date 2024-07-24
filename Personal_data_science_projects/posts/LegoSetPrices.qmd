@@ -1,5 +1,5 @@
 ---
-title: "Lego set prices"
+title: "A closer look at Lego set prices"
 author: "Sven Van Bael"
 date: 2024/07/21
 format: 
@@ -236,7 +236,7 @@ ggplot(df_sets_18to24_filt) +
 
 As expected, in @fig-retail_prices_year the mean retail price for sets has increased from 38.6 Euro/45.3 Euro (non-licensed/licensed) in 2018 to 64.9 Euro/66.6 Euro (non-licensed/licensed). This corresponds to the increase in set piece count seen in @fig-pieces_year.
 
-### Price-to-part ratio of sets over the years
+### Evolution of the price-to-part ratio from 2018 to 2024
 
 The most simple way to take into account the effect of the set piece count on the retail price is to calculate the price-to-part ratio.
 

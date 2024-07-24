@@ -9,8 +9,8 @@ website:
       - text: Home
         href: index.qmd
       - text: CV
-      - text: Data science experience
-        href: data_science_experience/datsciexp.qmd
+      - text: Personal data science projects
+        href: Personal_data_science_projects/dataprojects.qmd
 
 format:
   html:
