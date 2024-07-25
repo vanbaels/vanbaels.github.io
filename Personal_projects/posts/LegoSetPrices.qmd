@@ -412,10 +412,10 @@ df_lic_exp <- df_sets_18to24_filt %>%
 
 #Plot.
 ggplot(df_lic_exp) +
-  geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_lic, color = "#d88c0f", lty = 1) +
   geom_abline(slope = slope_lic, intercept = 100, color = "#d88c0f", lty = 2) +
+    geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25) +
   scale_x_continuous(name = "Pieces", breaks = seq(0, 12000, 2000)) +
   scale_y_continuous(name = "Retail price (EUR)", breaks = seq(0, 1000, 200)) +
   scale_color_manual(values = c("#d88c0f")) +
@@ -449,10 +449,10 @@ df_lic_chp <- df_sets_18to24_filt %>%
 
 #Plot.
 ggplot(df_lic_chp) +
-  geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_lic, color = "#d88c0f", lty = 1) +
   geom_abline(slope = slope_lic, intercept = -100, color = "#d88c0f", lty = 2) +
+  geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25) +
   scale_y_continuous(name = "Retail price (EUR)", breaks = seq(0, 1000, 200)) +
   scale_x_continuous(name = "Pieces", breaks = seq(0, 12000, 2000)) +
   scale_color_manual(values = c("#d88c0f")) +
@@ -486,10 +486,10 @@ df_nonlic_exp <- df_sets_18to24_filt %>%
 
 #Plot.
 ggplot(df_nonlic_exp) +
-  geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25, max.iter = 30000, force = 5) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_nonlic, color = "#9a1917", lty = 1) +
   geom_abline(slope = slope_nonlic, intercept = +100, color = "#9a1917", lty = 2) +
+    geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25, max.iter = 30000, force = 5) +
   scale_x_continuous(name = "Retail price (EUR)", breaks = seq(0, 12000, 2000)) +
   scale_y_continuous(name = "Pieces", breaks = seq(0, 1000, 200)) +
   scale_color_manual(values = c("#9a1917")) +
@@ -521,10 +521,10 @@ df_nonlic_chp <- df_sets_18to24_filt %>%
 
 #Plot.
 ggplot(df_nonlic_chp) +
-  geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25, max.iter = 30000, force = 5) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_nonlic, color = "#9a1917", lty = 1) +
   geom_abline(slope = slope_nonlic, intercept = -100, color = "#9a1917", lty = 2) +
+  geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25, max.iter = 30000, force = 5) +
   scale_x_continuous(name = "Retail price (EUR)", breaks = seq(0, 12000, 2000)) +
   scale_y_continuous(name = "Pieces", breaks = seq(0, 1000, 200)) +
   scale_color_manual(values = c("#9a1917")) +
@@ -539,6 +539,6 @@ ggplot(df_nonlic_chp) +
 
 ```
 
-@fig-chp_nonlic_sets is an easy one: every single set shown is an Art theme mosaic set containing mostly of 1x1 plates and tiles. As was mentioned in @chp-lic_sets, these parts are cheap to produce, and make up most of the sets, explaining their cheaper pricerange.
+@fig-chp_nonlic_sets is an easy one: every single set shown is an Art theme mosaic set containing mostly of 1x1 plates and tiles. As was mentioned in @fig-chp_lic_sets, these parts are cheap to produce, and make up most of the sets, explaining their cheaper pricerange.
 
 ## Conclusions
