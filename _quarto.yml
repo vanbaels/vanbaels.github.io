@@ -4,15 +4,16 @@ project:
 
 website:
   title: "Sven Van Bael"
+  search: false
   navbar:
     left:
       - text: Home
         href: index.qmd
       - text: CV
-      - text: Personal data science projects
-        href: Personal_data_science_projects/dataprojects.qmd
+      - text: Personal projects
+        href: Personal_projects/personal_projects.qmd
       - text: Academic work
-        href: Academic_work/academicwork.qmd
+        href: Academic_work/academic_work.qmd
 
 format:
   html:

@@ -16,13 +16,13 @@ Almost everyone is familiar with Lego, the popular construction toy with interlo
 
 Thanks to the `R` package [`brickset`](https://github.com/jbryer/brickset) I was able to collect data on all Lego sets released during 2018 and 2024, including statistics such as set theme, intellectual property license, number of pieces, retail price, etc. While exploring this data set I was curious if I could find an answer to some questions:
 
--   Are smaller sets more expensive to produce than bigger ones, i.e. is there a difference in price per piece count?
+-   Are smaller sets more expensive to produce than bigger ones, i.e. is there a difference in price-to-part ratio?
 
--   Is there a big difference between intellectual property licensed sets and those that are not?
+-   Is there a big price difference between intellectual property licensed sets and those that are not?
 
 -   Which intellectual property has the most expensive Lego sets?
 
--   Which set has the cheapest price per piece?
+-   Which set has the lowest price-to-part ratio?
 
 ## Packages used
 
@@ -51,7 +51,7 @@ glimpse(df_sets_18to24)
 
 ## Cleaning the dataset
 
-You can see that the dataframe has a total of `r ncol(df_sets_18to24)` columns with an abundance of information that I'm not interested in for this analysis. So to make life a little easier, I will only select the columns `setID`, `number`, `name`, `year`, `theme`, `themeGroup`, `subtheme`, `category`, `released`, `pieces`, and `DE_retailPrice` (as I'm located in Europe, I opted for prices in Euro).
+You can see that the data frame has a total of `r ncol(df_sets_18to24)` columns with an abundance of information that is not useful for this particular analysis. So for the next steps, I will only select the columns `setID`, `number`, `name`, `year`, `theme`, `themeGroup`, `subtheme`, `category`, `released`, `pieces`, and `DE_retailPrice` (I'm located in Europe, so I opted for the prices in Euro).
 
 ```{r}
 #| collapse: true
@@ -65,6 +65,8 @@ head(df_sets_18to24, n = 20) %>%
   datatable()
 ```
 
+------------------------------------------------------------------------
+
 To make things easier later on, any NAs in `subtheme` are filled in by the value of the column `themeGroup`:
 
 ```{r}
@@ -76,9 +78,9 @@ df_sets_18to24$subtheme <- ifelse(is.na(df_sets_18to24$subtheme) == T,
                                   df_sets_18to24$subtheme)
 ```
 
-While exploring the data further, it seems that the information on intellectual property license is spread over the columns `themeGroup` or `subtheme`, with no overlap between the two. As I want to be able to make an easy distinction between licensed and not-licensed, the new column `License` is created which contains this information. Additionally, the following filters are applied on the data frame:
+While exploring the data further, it seems that the information on intellectual property license is spread over both columns `themeGroup` or `subtheme`, with no overlap between the two. As I want to be able to make an easy distinction between licensed and not-licensed, the new column `License` is created which contains this information. Additionally, the following filters are applied on the data frame:
 
--   `pieces` cannot be NA, and is cut-off at 10, because these very small sets are often expansion sets such as base plates, road plates, rails, etc.
+-   `pieces` cannot be NA, and is cut-off at 10, because very small sets are often specialized expansion sets such as base plates, road plates, rails, etc.
 
 -   `DE_retailPrice` cannot be NA.
 
@@ -91,8 +93,6 @@ And finally, the column `Price-to-part ratio` is added, which is calculated from
 ```{r}
 #| collapse: true
 #| warning: false
-#| label: tbl-sets_18to24_filt
-#| tbl-cap: First 20 rows of `sets_18to24_filt`.
 
 df_sets_18to24_filt <- df_sets_18to24 %>%
   filter(is.na(pieces) == FALSE,
@@ -107,9 +107,6 @@ df_sets_18to24_filt <- df_sets_18to24 %>%
                             "Licensed",
                             "No license"),
          "Price-to-part ratio" = DE_retailPrice/pieces)
-
-head(df_sets_18to24_filt, n = 20) %>%
-  datatable()
 ```
 
 The column `year` is converted into type factor, instead of type double. This will turn it from a continuous variable into a categorical variable, and is necessary when using `year` as a grouping variable, or when creating plots with `ggplot2`. Also, the `License` column is turned into type factor, with the ordered levels "No license" and "License".
@@ -117,10 +114,17 @@ The column `year` is converted into type factor, instead of type double. This wi
 ```{r}
 #| collapse: true
 #| warning: false
+#| label: tbl-sets_18to24_filt
+#| tbl-cap: First 20 rows of `sets_18to24_filt`.
 
 df_sets_18to24_filt$year <- factor(df_sets_18to24_filt$year)
 df_sets_18to24_filt$License <- factor(df_sets_18to24_filt$License, levels = c("No license", "Licensed"))
+
+head(df_sets_18to24_filt, n = 20) %>%
+  datatable()
 ```
+
+------------------------------------------------------------------------
 
 ## Visually exploring the data
 
@@ -163,6 +167,8 @@ ggplot(df_release_yr) +
 
 In @fig-sets_released you can see that the number of sets released each year is quite stable, with almost an equal number of licensed versus non-licensed sets being released. Interesting is the difference in 2020, where there is a drop in licensed sets, and an increase in the non-licensed ones. Not sure what has caused this difference here, but a good guess is that due to COVID-19 a lot of media releases (movies, tv series, ...) have been postponed, which in turn could have resulted in the accompanying Lego sets not being released as well?
 
+Also noteworthy is that the number of sets for the years 2023 and 2024 is almost equal. However, the data for 2024 is incomplete, as at the time of writing it is only July 2024, meaning that in 7 months Lego has released almost as many sets as in the entire year of 2023.
+
 ### Evolution of set sizes and retail prices from 2018 to 2024
 
 ```{r}
@@ -184,7 +190,7 @@ ggplot(df_sets_18to24_filt) +
   facet_grid(~year) +
   geom_quasirandom(aes(x = License, y = pieces, color = License, fill = License), pch = 21, size = 3) +
   geom_point(data = df_pieces_stats, aes(x = License, y = `mean pieces`), size = 3) +
-  scale_y_continuous(name = "Pieces", trans = "log10") +
+  scale_y_continuous(name = "Piece count", trans = "log10") +
   scale_color_manual(values = c("#9a1917", "#d88c0f")) +
   scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
   theme_classic() +
@@ -234,7 +240,7 @@ ggplot(df_sets_18to24_filt) +
 
 ```
 
-As expected, in @fig-retail_prices_year the mean retail price for sets has increased from 38.6 Euro/45.3 Euro (non-licensed/licensed) in 2018 to 64.9 Euro/66.6 Euro (non-licensed/licensed). This corresponds to the increase in set piece count seen in @fig-pieces_year.
+As expected, in @fig-retail_prices_year the mean retail price for sets has increased from 38.57/45.27 EUR (non-licensed/licensed) in 2018 to 64.85/66.64 EUR (non-licensed/licensed). This corresponds to the increase in set piece count seen in @fig-pieces_year.
 
 ### Evolution of the price-to-part ratio from 2018 to 2024
 
@@ -246,7 +252,7 @@ The most simple way to take into account the effect of the set piece count on th
 #| collapse: true
 #| warning: false
 #| label: fig-ptp_years
-#| fig-cap: Price-to-part ratio (in Euro per piece) of licensed and non-licensed sets from 2018 to 2024.
+#| fig-cap: Price-to-part ratio (in EUR per piece) of licensed and non-licensed sets from 2018 to 2024.
 
 #Calculate mean price-to-part ratio for each year.
 df_ptp_stats <- df_sets_18to24_filt %>%
@@ -276,7 +282,7 @@ ggplot(df_sets_18to24_filt) +
         strip.text = element_text(size = 14, face = "bold"))
 ```
 
-In general, the price-to-part ratio for licensed sets is indeed slightly higher than those of non-licensed sets, with 2018 being the only exception (@fig-ptp_years). While most values clump together, there are some outliers with price-to-part ratios going as high as 1 Euro. Let's take a closer look by filtering for sets with a price-to-part ratio higher than 0.5 Euro.
+In general, the price-to-part ratio for licensed sets is indeed slightly higher than those of non-licensed sets, with 2018 being the only exception (@fig-ptp_years). While most values clump together, there are some outliers with price-to-part ratios going as high as 1 EUR. Let's take a closer look by filtering for sets with a price-to-part ratio higher than 0.5 EUR.
 
 ```{r}
 #| code-fold: true
@@ -284,11 +290,14 @@ In general, the price-to-part ratio for licensed sets is indeed slightly higher 
 #| collapse: false
 #| warning: false
 #| label: tbl-high_ptp_sets
-#| tbl-cap: Lego sets with a price-to-part ratio over 0.5 Euro per piece.
+#| tbl-cap: Lego sets with a price-to-part ratio over 0.5 EUR per piece.
 
+#Filter for sets that have a price-to-part ratio higher than 0.5 EUR
 df_high_ptp_sets <- filter(df_sets_18to24_filt, `Price-to-part ratio` > 0.5)
 datatable(df_high_ptp_sets, filter = "top")
 ```
+
+------------------------------------------------------------------------
 
 ```{r}
 #| collapse: true
@@ -298,7 +307,7 @@ summary(df_high_ptp_sets$License)
 summary(factor(df_high_ptp_sets$subtheme))
 ```
 
-Interestingly, @tbl-high_ptp_sets contains more non-licensed sets than licensed ones (which are thought to be more expensive). When looking at the subthemes, you can see that the table contains three playmat sets, and one train track extension. These are non-standard sets with non-standard pieces, explaining the high price-to-part ratios. The same reasoning can explain the high ratios for sets of the SPIKE educational theme (aimed at learning programming to kids, contains specialized parts such as motors, sensors, etc.) and the Lego City Stuntz theme (containing flywheel-powered stunt bikes). Finally, there is the Super Mario Power-Up Pack theme, an interactive playset that combines Super Mario gameplay with Lego bricks. As these sets are both licensed and contain specialized electronic parts, it is one of the most expensive in this list, with several sets reaching 0.9 Euro per brick.
+Interestingly, @tbl-high_ptp_sets contains more non-licensed sets than licensed ones (which are thought to be more expensive). When looking at the subthemes, you can see that the table contains three playmat sets, and one train track extension. These are non-standard sets with non-standard pieces, explaining the high price-to-part ratios. The same reasoning can explain the high ratios for sets of the SPIKE educational theme (aimed at learning programming to kids, contains specialized parts such as motors, sensors, etc.) and the Lego City Stuntz theme (containing flywheel-powered stunt bikes). Finally, there is the Super Mario Power-Up Pack theme, an interactive playset that combines Super Mario gameplay with Lego bricks. As these sets are both licensed and contain specialized electronic parts, it is one of the most expensive in this list, with several sets reaching 0.9 EUR per brick.
 
 When doing a deeper analysis, it could be argued that playmats, train track extensions and educational sets with expensive electronic parts should be excluded when analyzing the pricing of more standard Lego sets. For now, I will keep in mind that `r nrow(df_high_ptp_sets)` sets have very aberrant price-to-part ratios, but that this will probably have little impact on the total of `r nrow(df_sets_18to24_filt)` sets in `df_sets_18to24_filt`.
 
@@ -310,7 +319,7 @@ Next, let's focus on how the mean price-to-part ratio (also shown in @fig-ptp_ye
 #| collapse: true
 #| warning: false
 #| label: fig-ptp_evo_years
-#| fig-cap: Evolution of the mean price-to-part ratio (in Euro per piece) from 2018 to 2024.
+#| fig-cap: Evolution of the mean price-to-part ratio (in EUR per piece) from 2018 to 2024.
 
 ggplot(df_ptp_stats) +
   geom_line(aes(x = year, y = `mean PtP ratio`, color = License, group = License), linewidth = 1) +
@@ -332,24 +341,31 @@ In @fig-ptp_evo_years you can see that - except for 2018 - licensed sets have al
 
 ### Retail price versus set sizes
 
+Let's now look at the correlation between piece count and retail price for all the sets that have been released from 2018 to 2024.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
 #| collapse: true
 #| warning: false
+#| label: fig-price_pieces_corr_all
+#| fig-cap: Correlation between set piece count and retail price for all sets released in 2018 to 2024. Linear regression models are made for [**all**]{style="color:black;"}, [**licensed**]{style="color:#d88c0f;"} and [**non-licensed**]{style="color:#9a1917;"} sets.
+
 #Linear regression for all sets.
 lm_all <- lm(DE_retailPrice ~ pieces - 1, data = df_sets_18to24_filt)
 summary(lm_all)
-slope_all <- lm_all$coefficients[1]
 
 #Linear regression for non-licensed sets.
 lm_nonlic <- lm(DE_retailPrice ~ pieces - 1, data = filter(df_sets_18to24_filt, License == "No license"))
 summary(lm_nonlic)
-slope_nonlic <- lm_nonlic$coefficients[1]
 
 #Linear regression for non-licensed sets.
 lm_lic <- lm(DE_retailPrice ~ pieces - 1, data = filter(df_sets_18to24_filt, License == "Licensed"))
 summary(lm_lic)
+
+#Getting the slope from the fitted models.
+slope_all <- lm_all$coefficients[1]
+slope_nonlic <- lm_nonlic$coefficients[1]
 slope_lic <- lm_lic$coefficients[1]
 
 #Plot.
@@ -358,8 +374,11 @@ ggplot(df_sets_18to24_filt) +
   geom_abline(slope = slope_all, color = "black", lty = 1) +
   geom_abline(slope = slope_nonlic, color = "#9a1917", lty = 1) +
   geom_abline(slope = slope_lic, color = "#d88c0f", lty = 1) +
-  scale_y_continuous(breaks = seq(0, 1000, 200)) +
-  scale_x_continuous(breaks = seq(0, 12000, 2000)) +
+  geom_text(aes(x = 8700, y = 925, label = paste0("slope = ", round(slope_lic, 4))), color = "#d88c0f", angle = 36.3, size = 5) +
+    geom_text(aes(x = 9400, y = 840, label = paste0("slope = ", round(slope_all, 4))), color = "black", angle = 32.1, size = 5) +
+      geom_text(aes(x = 11000, y = 830, label = paste0("slope = ", round(slope_nonlic, 4))), color = "#9a1917", angle = 28.2, size = 5) +
+  scale_x_continuous(name = "Piece count", breaks = seq(0, 12000, 2000)) +
+  scale_y_continuous(name = "Retail price (EUR)", breaks = seq(0, 1000, 200)) +
   scale_color_manual(values = c("#9a1917", "#d88c0f")) +
   scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
   coord_cartesian(xlim = c(0, 12000), ylim = c(0, 1000)) +
@@ -371,24 +390,32 @@ ggplot(df_sets_18to24_filt) +
         legend.text = element_text(size = 14))
 ```
 
+From @fig-ptp_evo_years, we know already that there is indeed a price difference between licensed and non-licensed sets, so it is not a complete surprise that the fitted linear regressions differs when sub setting for licensed and non-licensed sets ( @fig-price_pieces_corr_all ). In a way, the slope of these linear regressions can be seen as an alternative way to estimate the price-to-part ratio, since multiplying the slope by the piece count results in the retail price (or at least an estimation of the retail price, according to fitted linear model).
+
+You can find the full details of the three fitted linear models in the code used to generate @fig-price_pieces_corr_all. All three have an R^2^ between `r min(summary(lm_all)$r.squared, summary(lm_lic)$r.squared, summary(lm_nonlic)$r.squared) %>% round(., 2)` and `r max(summary(lm_all)$r.squared, summary(lm_lic)$r.squared, summary(lm_nonlic)$r.squared) %>% round(., 2)` , which shows that they are a pretty good fit for the data. From this you could conclude that the correlation between piece count and retail price is pretty linear, meaning that sets with a high piece count do not become cheaper to produce.
+
+To have a look at what are the cheapest and most expensive sets within each category (licensed/non-licensed), I want to select the sets that deviate strongly from the linear regression. To have an idea for the cut-off to use for outliers, I used the standard deviation on the retail price of all sets (which is `r df_sets_18to24_filt$DE_retailPrice %>% sd() %>% round(., 2)` EUR) and increased this to 100 EUR. I then used this to filter `df_sets_18to24_filt` for licensed sets where the retail price deviates more than 100 EUR upwards of the fitted linear regression.
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
 #| collapse: true
 #| warning: false
 #| label: fig-exp_lic_sets
-#| fig-cap: Licensed sets that deviate 100 Euro or more above the linear regression of licensed sets.
+#| fig-cap: Licensed sets that deviate more than 100 EUR above the linear regression of licensed sets (indicated by the dashed line).
 
+#Filter for licensed sets that deviate 100 EUR above the fitted linear regression 
 df_lic_exp <- df_sets_18to24_filt %>%
   filter(DE_retailPrice > (slope_lic*pieces) + 100) %>%
-  filter(License == "Licensed")
+  filter(License == "Licensed") %>%
+  mutate("Dev_lm" = abs((slope_lic*pieces + 100) - DE_retailPrice))
 
+#Plot.
 ggplot(df_lic_exp) +
   geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_lic, color = "#d88c0f", lty = 1) +
   geom_abline(slope = slope_lic, intercept = 100, color = "#d88c0f", lty = 2) +
-  geom_abline(slope = slope_lic, intercept = -100, color = "#d88c0f", lty = 2) +
   scale_x_continuous(name = "Pieces", breaks = seq(0, 12000, 2000)) +
   scale_y_continuous(name = "Retail price (EUR)", breaks = seq(0, 1000, 200)) +
   scale_color_manual(values = c("#d88c0f")) +
@@ -401,6 +428,10 @@ ggplot(df_lic_exp) +
         legend.title = element_blank(),
         legend.text = element_text(size = 14))
 ```
+
+Not a lot of surprises in @fig-exp_lic_sets, showing sets that already were known for their hefty retail price. Absolute champion is the Liebherr Crawler Crane (42146), where not only the license, but also the included motors and control app have its effect on the retail price.
+
+Similarly, I looked at the licensed sets that are on the cheap end of the fitted linear regression:
 
 ```{r}
 #| code-fold: true
@@ -408,17 +439,19 @@ ggplot(df_lic_exp) +
 #| collapse: true
 #| warning: false
 #| label: fig-chp_lic_sets
-#| fig-cap: Licensed sets that deviate 100 Euro or more below the linear regression of licensed sets.
+#| fig-cap: Licensed sets that deviate more than 100 EUR below the linear regression of licensed sets (indicated by the dashed line).
 
+#Filter for licensed sets that deviate 100 EUR below the fitted linear regression.
 df_lic_chp <- df_sets_18to24_filt %>%
   filter(DE_retailPrice < (slope_lic*pieces) - 100) %>%
-  filter(License == "Licensed")
+  filter(License == "Licensed") %>%
+  mutate("Dev_lm" = abs((slope_lic*pieces - 100) - DE_retailPrice))
 
+#Plot.
 ggplot(df_lic_chp) +
   geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_lic, color = "#d88c0f", lty = 1) +
-  geom_abline(slope = slope_lic, intercept = 100, color = "#d88c0f", lty = 2) +
   geom_abline(slope = slope_lic, intercept = -100, color = "#d88c0f", lty = 2) +
   scale_y_continuous(name = "Retail price (EUR)", breaks = seq(0, 1000, 200)) +
   scale_x_continuous(name = "Pieces", breaks = seq(0, 12000, 2000)) +
@@ -433,25 +466,30 @@ ggplot(df_lic_chp) +
         legend.text = element_text(size = 14))
 ```
 
+@fig-chp_lic_sets shows two contenders for the cheapest licensed set: Harry Potter Hogwarts Crests (31201), and Jim Lee Batman Collection (31205). Both sets are part of the Lego Art theme, and use 1x1 round plates and/or tiles to create what is in essence a pixel artwork. Content-wise, the vast majority of these sets consist of these tiny 1x1 round plates/tiles, which do not require a lot of plastic to produce, making them cheap to produce. Indeed, even the next three cheapest sets in line are again in the Lego Art theme: Star Wars The Sith (31200), Marvel Studios Iron Man (31199), and Disney's Mickey Mouse (31202). The first non-Art set is Hogwart's Castle, a microfig scale rendition of the eponymous castle from Harry Potter.
+
+Following the same principle, I filtered for the most expensive non-licensed sets:
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show code"
 #| collapse: true
 #| warning: false
 #| label: fig-exp_nonlic_sets
-#| fig-cap: Non-licensed sets that deviate 100 Euro or more above the linear regression of non-licensed sets.
+#| fig-cap: Non-licensed sets that deviate more than 100 EUR above the linear regression of non-licensed sets.
 
+#Filter for non-licensed sets that deviate 100 EUR above the fitted linear regression.
 df_nonlic_exp <- df_sets_18to24_filt %>%
   filter(DE_retailPrice > (slope_nonlic*pieces) + 100) %>%
   filter(License == "No license") %>%
-  mutate(Pricerange = "Expensive")
+  mutate("Dev_lm" = abs((slope_nonlic*pieces + 100) - DE_retailPrice))
 
+#Plot.
 ggplot(df_nonlic_exp) +
   geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25, max.iter = 30000, force = 5) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_nonlic, color = "#9a1917", lty = 1) +
-  geom_abline(slope = slope_nonlic, intercept = 100, color = "#9a1917", lty = 2) +
-  geom_abline(slope = slope_nonlic, intercept = -100, color = "#9a1917", lty = 2) +
+  geom_abline(slope = slope_nonlic, intercept = +100, color = "#9a1917", lty = 2) +
   scale_x_continuous(name = "Retail price (EUR)", breaks = seq(0, 12000, 2000)) +
   scale_y_continuous(name = "Pieces", breaks = seq(0, 1000, 200)) +
   scale_color_manual(values = c("#9a1917")) +
@@ -464,6 +502,8 @@ ggplot(df_nonlic_exp) +
         legend.title = element_blank(),
         legend.text = element_text(size = 14))
 ```
+
+The first three most expensive sets in @fig-exp_nonlic_sets are part of the educational SPIKE theme (45678 and 45345) or Mindstorms (51515), which explains their high price. Fourth place is the 4x4 X-Treme Off-Roader Technic set, coming with motors and a control app, again explaining its higher price. Fifth is the first real Lego set: the motorized lighthouse, which - as the name says - does also come with a motor, but is still mostly a Lego set.
 
 ```{r}
 #| code-fold: true
@@ -471,18 +511,19 @@ ggplot(df_nonlic_exp) +
 #| collapse: true
 #| warning: false
 #| label: fig-chp_nonlic_sets
-#| fig-cap: Non-licensed sets that deviate 100 Euro or more below the linear regression of non-licensed sets.
+#| fig-cap: Non-licensed sets that deviate more than 100 EUR below the linear regression of non-licensed sets.
 
+#Filter for non-licensed sets that deviate 100 EUR below the fitted linear regression.
 df_nonlic_chp <- df_sets_18to24_filt %>%
   filter(DE_retailPrice < (slope_nonlic*pieces) - 100) %>%
   filter(License == "No license") %>%
-  mutate(Pricerange = "Cheaper")
+  mutate("Dev_lm" = abs((slope_nonlic*pieces - 100) - DE_retailPrice))
 
+#Plot.
 ggplot(df_nonlic_chp) +
   geom_text_repel(aes(x = pieces, y = DE_retailPrice, label = name), box.padding = 0.25, max.overlaps = Inf, segment.curvature = -0.1, segment.ncp = 3, segment.angle = 20, min.segment.length = 0.25, max.iter = 30000, force = 5) +
   geom_point(aes(x = pieces, y = DE_retailPrice, color = License, fill = License), pch = 21, size = 3) +
   geom_abline(slope = slope_nonlic, color = "#9a1917", lty = 1) +
-  geom_abline(slope = slope_nonlic, intercept = 100, color = "#9a1917", lty = 2) +
   geom_abline(slope = slope_nonlic, intercept = -100, color = "#9a1917", lty = 2) +
   scale_x_continuous(name = "Retail price (EUR)", breaks = seq(0, 12000, 2000)) +
   scale_y_continuous(name = "Pieces", breaks = seq(0, 1000, 200)) +
@@ -497,3 +538,7 @@ ggplot(df_nonlic_chp) +
         legend.text = element_text(size = 14))
 
 ```
+
+@fig-chp_nonlic_sets is an easy one: every single set shown is an Art theme mosaic set containing mostly of 1x1 plates and tiles. As was mentioned in @chp-lic_sets, these parts are cheap to produce, and make up most of the sets, explaining their cheaper pricerange.
+
+## Conclusions
