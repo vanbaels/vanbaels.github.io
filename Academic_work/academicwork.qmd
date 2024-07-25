@@ -1,5 +1,8 @@
 ---
 title: "Academic work"
+subtitle: "A selection of scripts and analyses that I developed during my (post)doctoral research"
+title-block-banner: "#f0f3f5"
+title-block-banner-color: "black"
 listing:
   type: default
   contents: posts
