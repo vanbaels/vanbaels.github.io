@@ -1,0 +1,7 @@
+---
+title: "Academic work"
+listing:
+  type: default
+  contents: posts
+  max-description-length: 100
+---

@@ -11,6 +11,8 @@ website:
       - text: CV
       - text: Personal data science projects
         href: Personal_data_science_projects/dataprojects.qmd
+      - text: Academic work
+        href: Academic_work/academicwork.qmd
 
 format:
   html:
