@@ -559,3 +559,5 @@ From this quick exploration of the Lego dataset, we can extract the following co
 -   **Liebherr Crawler Crane LR 13000 (42146) and 4x4 X-Treme Off-Roader (42099) are the most expensive sets in the licensed and non-licensed category.** In the non-licensed category, the 4x4 X-Treme Off-Roader is preceded by three SPIKE and Mindstorm sets (@fig-exp_nonlic_sets), but these can be considered highly specialized and don't really fall into the Lego model set category.
 
     Second places go to the Star Wars Imperial Star Destroyer (75252), and the Motorized Lighthouse (21335).
+
+All-in-all it is interesting to see that the price-to-part ratio did increase a during what was probably a COVID-induced (?) economical situation (@fig-ptp_evo_years). As of 2024, it looks like this has stabilized to the pre-2020 situation. With Lego releasing increasingly bigger sets (@fig-pieces_year), this might give the impression that Lego sets overall are getting more and more expensive, but as we see from the price-to-part ratio, the opposite is actually true (at least for the years 2018-2024).
