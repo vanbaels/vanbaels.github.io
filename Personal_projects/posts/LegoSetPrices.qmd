@@ -10,13 +10,13 @@ format:
 editor: visual
 ---
 
-Almost everyone is familiar with Lego, the popular construction toy with interlocking brightly coloured plastic bricks. In the last two decades, the Lego marketing has not only focused on children, but also on adults, with more intricate and detailed sets becoming available. Everyone who has a Lego fan at home (be it a child, an adult, or both) will know the sometimes hefty price ranges, especially for sets that are under an intellectual property license (think of Star Wars, Marvel, Minecraft, etc.).
+Many people will be familiar with Lego, the popular construction sets with interlocking brightly coloured plastic bricks. In the later years, Lego marketing has successfully targeted a more adult audience (including myself), with sets that are more intricate and detailed. Every Lego fan, or who knows Lego fans (be it a child or an adult) will also know the sometimes hefty price ranges, especially for the "adult" sets, and those under an intellectual property license (think of Star Wars, Marvel, Minecraft, etc.).
 
-Thanks to the `R` package [`brickset`](https://github.com/jbryer/brickset) I was able to collect data on all Lego sets released during 2018 and 2024, including statistics such as set theme, intellectual property license, number of pieces, retail price, etc. While exploring this data set I was curious if I could find an answer to some questions:
+Thanks to the `R` package [`brickset`](https://github.com/jbryer/brickset) I was able to collect data on all Lego sets released during 2018 and 2024, with variables such as set theme, intellectual property license, number of pieces, retail price, etc. By exploring this data set I was curious if I could find an answer to some questions:
 
 -   Are smaller sets more expensive to produce than bigger ones, i.e. is there a difference in price-to-part ratio?
 
--   Is there a big price difference between intellectual property licensed sets and those that are not?
+-   Is there a big price difference between intellectual property licensed sets and other sets?
 
 -   Which intellectual property has the most expensive Lego sets?
 
@@ -37,7 +37,7 @@ library(ggrepel)
 
 ## Obtaining data on all Lego sets released from 2018 to 2024
 
-The `getSets` function from the `brickset` package interfaces with the API on the [Brickset](https://brickset.com/) website (an active account is required) and returns a data frame containing all Lego sets released for a specified year. Initially, I was planning to create a database with all sets released in the last 5 years (i.e. 2019-2024). However, I was hesitant of potential COVID-19 related effects (production lags, delayed set releases, ...), so I instead opted for the 2018-2024 period (July 2024 at the time of writing) to have a good amount of pre- and post-COVID-19 data. The combined data frame is available as `Lego_sets_18to24.csv`
+The `getSets` function from the `brickset` package interfaces with the API on the [Brickset](https://brickset.com/) website (an active account on this website is required) and returns a data frame containing all Lego sets released for a specified year. Initially, I was planning to create a database with all sets released in the last 5 years (2019-2024). However, being alert for potential COVID-19 related effects (production lags, delayed set releases, ...), I instead opted for the 2018-2024 period to have a good amount of pre- and post-COVID-19 data. The combined data frame is available as `Lego_sets_18to24.csv`
 
 ```{r}
 #| collapse: true
@@ -55,7 +55,7 @@ You can see that the data frame has a total of `r ncol(df_sets_18to24)` columns 
 #| collapse: true
 #| warning: false
 #| label: tbl-sets_18to24
-#| tbl-cap: First 20 rows of `sets_18to24`.
+#| tbl-cap: 'First 20 rows of `sets_18to24`.'
 
 df_sets_18to24 <- read_csv("Lego_sets_18to24.csv") %>%
   select(setID, number, name, year, theme, themeGroup, subtheme, category, released, pieces, DE_retailPrice)
@@ -76,7 +76,7 @@ df_sets_18to24$subtheme <- ifelse(is.na(df_sets_18to24$subtheme) == T,
                                   df_sets_18to24$subtheme)
 ```
 
-While exploring the data further, it seems that the information on intellectual property license is spread over both columns `themeGroup` or `subtheme`, with no overlap between the two. As I want to be able to make an easy distinction between licensed and not-licensed, the new column `License` is created which contains this information. Additionally, the following filters are applied on the data frame:
+While exploring the data further, it seems that the information on intellectual property license is spread over both columns `themeGroup` or `subtheme`, with no overlap between the two. As I want to be able to make an easy distinction between licensed and not-licensed, the new column `License` is created that contains this information. Additionally, the following filters are applied on the data frame:
 
 -   `pieces` cannot be NA, and is cut-off at 10, because very small sets are often specialized expansion sets such as base plates, road plates, rails, etc.
 
@@ -113,7 +113,7 @@ The column `year` is converted into type factor, instead of type double. This wi
 #| collapse: true
 #| warning: false
 #| label: tbl-sets_18to24_filt
-#| tbl-cap: First 20 rows of `sets_18to24_filt`.
+#| tbl-cap: 'First 20 rows of `sets_18to24_filt`.'
 
 df_sets_18to24_filt$year <- factor(df_sets_18to24_filt$year)
 df_sets_18to24_filt$License <- factor(df_sets_18to24_filt$License, levels = c("No license", "Licensed"))
@@ -126,6 +126,8 @@ head(df_sets_18to24_filt, n = 20) %>%
 
 ## Visually exploring the data
 
+All of the code that is used to generate each figure is available under "Show code".
+
 ### Number of sets released each year
 
 ```{r}
@@ -134,17 +136,17 @@ head(df_sets_18to24_filt, n = 20) %>%
 #| collapse: true
 #| warning: false
 #| label: fig-sets_released
-#| fig-cap: Number of sets released from 2018 to 2024.
+#| fig-cap: 'Number of [**non-licensed**]{style="color:#9a1917;"}, [**licensed**]{style="color:#d88c0f;"}, and [**all**]{style="color:black;"} sets released from 2018 to 2024.'
 
 #Calculate the number of sets released each year.
 df_release_yr <- df_sets_18to24_filt %>%
   group_by(year, License) %>%
   summarise("n_sets" = n()) %>%
-  mutate("Total" = sum(n_sets)) %>%
+  mutate("All" = sum(n_sets)) %>%
   pivot_wider(names_from = License, values_from = n_sets) %>%
-  pivot_longer(cols = c(Licensed, `No license`, Total), names_to = "License", values_to = "n_sets")
+  pivot_longer(cols = c(Licensed, `No license`, All), names_to = "License", values_to = "n_sets")
 
-df_release_yr$License <- factor(df_release_yr$License, levels = c("No license", "Licensed", "Total"))
+df_release_yr$License <- factor(df_release_yr$License, levels = c("No license", "Licensed", "All"))
 
 #Plot.
 ggplot(df_release_yr) +
@@ -175,7 +177,7 @@ Also noteworthy is that the number of sets for the years 2023 and 2024 is almost
 #| collapse: true
 #| warning: false
 #| label: fig-pieces_year
-#| fig-cap: Set piece count (axis in log scale) from 2018 to 2024.
+#| fig-cap: 'Piece count (axis in log scale) of [**non-licensed**]{style="color:#9a1917;"} and [**licensed**]{style="color:#d88c0f;"} sets from 2018 to 2024.'
 
 #Calculate the mean piece count of all sets for each year.
 df_pieces_stats <- df_sets_18to24_filt %>%
@@ -188,9 +190,10 @@ ggplot(df_sets_18to24_filt) +
   facet_grid(~year) +
   geom_quasirandom(aes(x = License, y = pieces, color = License, fill = License), pch = 21, size = 3) +
   geom_point(data = df_pieces_stats, aes(x = License, y = `mean pieces`), size = 3) +
-  scale_y_continuous(name = "Piece count", trans = "log10") +
+  scale_y_continuous(name = "Piece count", trans = "log10", breaks = 10^seq(0, 4, 1)) +
   scale_color_manual(values = c("#9a1917", "#d88c0f")) +
   scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
+  coord_cartesian(ylim = c(10^0, 10^4)) +
   theme_classic() +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = 18),
@@ -202,7 +205,7 @@ ggplot(df_sets_18to24_filt) +
         strip.text = element_text(size = 14, face = "bold"))
 ```
 
-@fig-pieces_year shows that there is no substantial difference in piece count between licensed and non-licensed sets. Interesting is that the mean piece count of Lego sets has been increasing over the years. In 2018, the mean piece count was 404/430 for non-licensed/licensed sets respectively. By 2024, this has increased to 737/627 for non-licensed/licensed. As a consequence, mean set prizes should have also increased during that time period.
+@fig-pieces_year shows that there is no substantial difference in piece count between licensed and non-licensed sets. Interesting is that the mean piece count of Lego sets has been increasing over the years. In 2018, the mean piece count was 404/430 for non-licensed/licensed sets respectively. By 2024, this has increased to 737/627 for non-licensed/licensed. As a consequence, mean set prizes should have also increased in that time period.
 
 ```{r}
 #| code-fold: true
@@ -210,7 +213,7 @@ ggplot(df_sets_18to24_filt) +
 #| collapse: true
 #| warning: false
 #| label: fig-retail_prices_year
-#| fig-cap: Set retail prices (axis in log scale) from 2018 to 2024.
+#| fig-cap: 'Retail prices (axis in log scale) of [**non-licensed**]{style="color:#9a1917;"} and [**licensed**]{style="color:#d88c0f;"} sets from 2018 to 2024.'
 
 #Calculate the mean retail price of all sets for each year.
 df_prices_stats <- df_sets_18to24_filt %>%
@@ -226,6 +229,7 @@ ggplot(df_sets_18to24_filt) +
   scale_y_continuous(name = "Retail price (EUR)", trans = "log10") +
   scale_color_manual(values = c("#9a1917", "#d88c0f")) +
   scale_fill_manual(values = c("#9a19174D", "#d88c0f4D")) +
+  coord_cartesian(ylim = c(10^0, 10^3)) +
   theme_classic() +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(size = 18),
@@ -238,7 +242,7 @@ ggplot(df_sets_18to24_filt) +
 
 ```
 
-As expected, in @fig-retail_prices_year the mean retail price for sets has increased from 38.57/45.27 EUR (non-licensed/licensed) in 2018 to 64.85/66.64 EUR (non-licensed/licensed). This corresponds to the increase in set piece count seen in @fig-pieces_year.
+As expected, in @fig-retail_prices_year the mean retail price for sets has increased from 38.57 EUR/45.27 EUR (non-licensed/licensed) in 2018 to 64.85 EUR/66.64 EUR (non-licensed/licensed). This corresponds to the increase in set piece count seen in @fig-pieces_year.
 
 ### Evolution of the price-to-part ratio from 2018 to 2024
 
@@ -250,7 +254,7 @@ The most simple way to take into account the effect of the set piece count on th
 #| collapse: true
 #| warning: false
 #| label: fig-ptp_years
-#| fig-cap: Price-to-part ratio (in EUR per piece) of licensed and non-licensed sets from 2018 to 2024.
+#| fig-cap: 'Price-to-part ratio (in EUR per piece) of [**non-licensed**]{style="color:#9a1917;"} and [**licensed**]{style="color:#d88c0f;"} sets from 2018 to 2024.'
 
 #Calculate mean price-to-part ratio for each year.
 df_ptp_stats <- df_sets_18to24_filt %>%
@@ -288,7 +292,7 @@ In general, the price-to-part ratio for licensed sets is indeed slightly higher 
 #| collapse: false
 #| warning: false
 #| label: tbl-high_ptp_sets
-#| tbl-cap: Lego sets with a price-to-part ratio over 0.5 EUR per piece.
+#| tbl-cap: 'Lego sets with a price-to-part ratio over 0.5 EUR per piece.'
 
 #Filter for sets that have a price-to-part ratio higher than 0.5 EUR
 df_high_ptp_sets <- filter(df_sets_18to24_filt, `Price-to-part ratio` > 0.5)
@@ -317,7 +321,7 @@ Next, let's focus on how the mean price-to-part ratio (also shown in @fig-ptp_ye
 #| collapse: true
 #| warning: false
 #| label: fig-ptp_evo_years
-#| fig-cap: Evolution of the mean price-to-part ratio (in EUR per piece) from 2018 to 2024.
+#| fig-cap: 'Evolution of the mean price-to-part ratio (in EUR per piece) of [**non-licensed**]{style="color:#9a1917;"} and [**licensed**]{style="color:#d88c0f;"} sets from 2018 to 2024.'
 
 ggplot(df_ptp_stats) +
   geom_line(aes(x = year, y = `mean PtP ratio`, color = License, group = License), linewidth = 1) +
@@ -335,7 +339,7 @@ ggplot(df_ptp_stats) +
         legend.text = element_text(size = 14))
 ```
 
-In @fig-ptp_evo_years you can see that - except for 2018 - licensed sets have always been more expensive than non-licensed sets, with the difference ranging from 1.1 cents (2021) to 1.6 cents (2023). Interesting is also that both licensed and non-licensed sets follow an identical trend over the years, meaning that price increases/decreases have affected all sets, not just licensed or non-licensed. It's fair to assume that these changes are probably caused by economical factors (production costs, etc.), as this would indeed affect all sets. Prices started to rise in 2020 and peaked at 2021, and after that decreased and stabilized again. The cause of this bump is unknown, one explanation could be the effect of COVID-19 on the economy.
+In @fig-ptp_evo_years you can see that - except for 2018 - licensed sets have always been more expensive than non-licensed sets, with the difference ranging from 1.1 cents (2021) to 1.6 cents (2023) per piece. Both licensed and non-licensed sets do follow an identical trend over the years, meaning that price increases/decreases have affected all Lego sets, not just licensed or non-licensed. It's fair to assume that these changes are probably caused by economical factors (production costs, etc.), as this would indeed affect all sets. Price-to-part ratios started to rise in 2020 and peaked at 2021, and after that decreased and stabilized again. I have no idea about the exact cause of this bump, but a possible explanation could be the effect of COVID-19 on the economy.
 
 ### Retail price versus set sizes
 
@@ -347,8 +351,9 @@ Let's now look at the correlation between piece count and retail price for all t
 #| collapse: true
 #| warning: false
 #| label: fig-price_pieces_corr_all
-#| fig-cap: Correlation between set piece count and retail price for all sets released in 2018 to 2024. Linear regression models are made for [**all**]{style="color:black;"}, [**licensed**]{style="color:#d88c0f;"} and [**non-licensed**]{style="color:#9a1917;"} sets.
+#| fig-cap: 'Correlation between set piece count and retail price for all sets released in 2018 to 2024. Linear regression models are made for [**non-licensed**]{style="color:#9a1917;"}, [**licensed**]{style="color:#d88c0f;"}, and [**all**]{style="color:black;"} sets.'
 
+#For all linear regressions, the intercept is set to 0, since a piece count of 0 should also result in a retail price of 0.
 #Linear regression for all sets.
 lm_all <- lm(DE_retailPrice ~ pieces - 1, data = df_sets_18to24_filt)
 summary(lm_all)
@@ -388,7 +393,7 @@ ggplot(df_sets_18to24_filt) +
         legend.text = element_text(size = 14))
 ```
 
-From @fig-ptp_evo_years, we know already that there is indeed a price difference between licensed and non-licensed sets, so it is not a complete surprise that the fitted linear regressions differs when sub setting for licensed and non-licensed sets ( @fig-price_pieces_corr_all ). In a way, the slope of these linear regressions can be seen as an alternative way to estimate the price-to-part ratio, since multiplying the slope by the piece count results in the retail price (or at least an estimation of the retail price, according to fitted linear model).
+From @fig-ptp_evo_years, we know already that there is indeed a price difference between licensed and non-licensed sets, so it is not a complete surprise that the fitted linear regressions differs when sub setting for licensed and non-licensed sets ( @fig-price_pieces_corr_all ). In a way, the slope of these linear regressions can be seen as an alternative way to estimate the price-to-part ratio, since multiplying the slope by the piece count results in the retail price (or more correctly: an estimation of the retail price according to the fitted linear model).
 
 You can find the full details of the three fitted linear models in the code used to generate @fig-price_pieces_corr_all. All three have an R^2^ between `r min(summary(lm_all)$r.squared, summary(lm_lic)$r.squared, summary(lm_nonlic)$r.squared) %>% round(., 2)` and `r max(summary(lm_all)$r.squared, summary(lm_lic)$r.squared, summary(lm_nonlic)$r.squared) %>% round(., 2)` , which shows that they are a pretty good fit for the data. From this you could conclude that the correlation between piece count and retail price is pretty linear, meaning that sets with a high piece count do not become cheaper to produce.
 
@@ -400,7 +405,7 @@ To have a look at what are the cheapest and most expensive sets within each cate
 #| collapse: true
 #| warning: false
 #| label: fig-exp_lic_sets
-#| fig-cap: Licensed sets that deviate more than 100 EUR above the linear regression of licensed sets (indicated by the dashed line).
+#| fig-cap: '[**Licensed**]{style="color:#d88c0f;"} sets that deviate more than 100 EUR above the linear regression of licensed sets (indicated by the dashed line).'
 
 #Filter for licensed sets that deviate 100 EUR above the fitted linear regression 
 df_lic_exp <- df_sets_18to24_filt %>%
@@ -427,7 +432,7 @@ ggplot(df_lic_exp) +
         legend.text = element_text(size = 14))
 ```
 
-Not a lot of surprises in @fig-exp_lic_sets, showing sets that already were known for their hefty retail price. Absolute champion is the Liebherr Crawler Crane (42146), where not only the license, but also the included motors and control app have its effect on the retail price.
+Not a lot of surprises in @fig-exp_lic_sets, showing sets that already were known for their hefty retail price. Absolute champion is the Liebherr Crawler Crane (42146), where not only the license, but also the included motors and control app have its effect on the retail price. In second place is the Star Wars Imperial Star Destroyer (75252).
 
 Similarly, I looked at the licensed sets that are on the cheap end of the fitted linear regression:
 
@@ -437,7 +442,7 @@ Similarly, I looked at the licensed sets that are on the cheap end of the fitted
 #| collapse: true
 #| warning: false
 #| label: fig-chp_lic_sets
-#| fig-cap: Licensed sets that deviate more than 100 EUR below the linear regression of licensed sets (indicated by the dashed line).
+#| fig-cap: '[**Licensed**]{style="color:#d88c0f;"} sets that deviate more than 100 EUR below the linear regression of licensed sets (indicated by the dashed line).'
 
 #Filter for licensed sets that deviate 100 EUR below the fitted linear regression.
 df_lic_chp <- df_sets_18to24_filt %>%
@@ -474,7 +479,7 @@ Following the same principle, I filtered for the most expensive non-licensed set
 #| collapse: true
 #| warning: false
 #| label: fig-exp_nonlic_sets
-#| fig-cap: Non-licensed sets that deviate more than 100 EUR above the linear regression of non-licensed sets.
+#| fig-cap: '[**Non-licensed**]{style="color:#9a1917;"} sets that deviate more than 100 EUR above the linear regression of non-licensed sets.'
 
 #Filter for non-licensed sets that deviate 100 EUR above the fitted linear regression.
 df_nonlic_exp <- df_sets_18to24_filt %>%
@@ -501,7 +506,7 @@ ggplot(df_nonlic_exp) +
         legend.text = element_text(size = 14))
 ```
 
-The first three most expensive sets in @fig-exp_nonlic_sets are part of the educational SPIKE theme (45678 and 45345) or Mindstorms (51515), which explains their high price. Fourth place is the 4x4 X-Treme Off-Roader Technic set, coming with motors and a control app, again explaining its higher price. Fifth is the first real Lego set: the motorized lighthouse, which - as the name implies - does also come with a motor, but is still mostly a Lego set.
+The first three most expensive sets in @fig-exp_nonlic_sets are part of the educational SPIKE theme (45678 and 45345) or Mindstorms (51515), which explains their high price. Fourth place is the 4x4 X-Treme Off-Roader Technic set, coming with motors and a control app, again explaining its higher price. Fifth is the first real model set: the Motorized Lighthouse (21335), which - as the name implies - also comes with a motor, but is first and foremost a Lego model set.
 
 ```{r}
 #| code-fold: true
@@ -509,7 +514,7 @@ The first three most expensive sets in @fig-exp_nonlic_sets are part of the educ
 #| collapse: true
 #| warning: false
 #| label: fig-chp_nonlic_sets
-#| fig-cap: Non-licensed sets that deviate more than 100 EUR below the linear regression of non-licensed sets.
+#| fig-cap: '[**Non-licensed**]{style="color:#9a1917;"} sets that deviate more than 100 EUR below the linear regression of non-licensed sets.'
 
 #Filter for non-licensed sets that deviate 100 EUR below the fitted linear regression.
 df_nonlic_chp <- df_sets_18to24_filt %>%
@@ -539,4 +544,18 @@ ggplot(df_nonlic_chp) +
 
 @fig-chp_nonlic_sets is an easy one: every single set on here is an Art theme mosaic set consisting mostly of 1x1 plates and tiles. As was mentioned in @fig-chp_lic_sets, these parts are cheap to produce, and make up most of the sets, explaining their cheaper price range.
 
-## Conclusions
+## Summary
+
+From this quick exploration of the Lego dataset, we can extract the following conclusions:
+
+-   **Lego overall retail prices have increased between 2018 and 2024, but so have the set sizes.** Lego seems to release progresively bigger sets (@fig-pieces_year), possibly because they increasingly target an older audience that prefers more detailed and intricate models. As a logical consequence, the overall retail prices increase as well (@fig-retail_prices_year).
+
+-   **Price-to-part ratios are consistently higher for licensed sets.** As expected, licensed sets have an increased price-to-part ratio, with a difference ranging from 1.1 - 1.6 cents per piece (@fig-ptp_evo_years). Both licensed and non-licensed sets follow the same trends from 20218 to 2024, indicating that external (economic) factors influence the price of all sets equally.
+
+-   **Set piece count and retail price follow a linear correlation.** Set retail price is independent of the set size (except for some sets with highly specialized parts, see @tbl-high_ptp_sets). Hence, bigger sets are not cheaper to produce than smaller ones.
+
+-   **The Lego Art theme has the cheapest price-to-part ratio.** It does not matter if they're licensed (@fig-chp_lic_sets) or not (@fig-chp_nonlic_sets), several of the Art theme sets end up being the cheapest in both categories. Possible explanation is that the sets are mainly 1x1 round plates and tiles.
+
+-   **Liebherr Crawler Crane LR 13000 (42146) and 4x4 X-Treme Off-Roader (42099) are the most expensive sets in the licensed and non-licensed category.** In the non-licensed category, the 4x4 X-Treme Off-Roader is preceded by three SPIKE and Mindstorm sets (@fig-exp_nonlic_sets), but these can be considered highly specialized and don't really fall into the Lego model set category.
+
+    Second places go to the Star Wars Imperial Star Destroyer (75252), and the Motorized Lighthouse (21335).
