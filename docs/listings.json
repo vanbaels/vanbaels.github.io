@@ -17,7 +17,9 @@
   },
   {
     "listing": "/Academic_work/academic_work.html",
-    "items": []
+    "items": [
+      "/Academic_work/posts/Pep_net_charge.html"
+    ]
   },
   {
     "listing": "/Personal_projects/personal_projects.html",

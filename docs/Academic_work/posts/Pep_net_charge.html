@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.54">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sven Van Bael">
+<meta name="dcterms.date" content="2024-07-27">
+
+<title>Calculating the net charge of a peptide – Sven Van Bael</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="../../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+
+<script src="../../site_libs/datatables-binding-0.33/datatables.js"></script>
+
+<script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="../../site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<link href="../../site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+
+<script src="../../site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+
+<link href="../../site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="../../site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Sven Van Bael</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <span class="nav-link">
+<span class="menu-text">CV</span>
+    </span>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../Personal_projects/personal_projects.html"> 
+<span class="menu-text">Personal projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../Academic_work/academic_work.html"> 
+<span class="menu-text">Academic work</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#packages-used" id="toc-packages-used" class="nav-link active" data-scroll-target="#packages-used"><span class="header-section-number">1</span> Packages used</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">2</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#sec-ion_groups" id="toc-sec-ion_groups" class="nav-link" data-scroll-target="#sec-ion_groups"><span class="header-section-number">2.1</span> Identifying all ionizable groups within a peptide</a></li>
+  <li><a href="#calculating-the-fraction-of-chargedneutral-molecules" id="toc-calculating-the-fraction-of-chargedneutral-molecules" class="nav-link" data-scroll-target="#calculating-the-fraction-of-chargedneutral-molecules"><span class="header-section-number">2.2</span> Calculating the fraction of charged/neutral molecules</a></li>
+  <li><a href="#using-the-a--and-ha-fractions-to-calculate-overall-charge" id="toc-using-the-a--and-ha-fractions-to-calculate-overall-charge" class="nav-link" data-scroll-target="#using-the-a--and-ha-fractions-to-calculate-overall-charge"><span class="header-section-number">2.3</span> Using the <span class="math inline">\([A^-]\)</span> and <span class="math inline">\([HA]\)</span> fractions to calculate overall charge</a></li>
+  <li><a href="#the-pka-values-of-the-termini-and-amino-acid-side-chains" id="toc-the-pka-values-of-the-termini-and-amino-acid-side-chains" class="nav-link" data-scroll-target="#the-pka-values-of-the-termini-and-amino-acid-side-chains"><span class="header-section-number">2.4</span> The pK<sub>a</sub> values of the termini and amino acid side chains</a></li>
+  </ul></li>
+  <li><a href="#writing-the-r-function" id="toc-writing-the-r-function" class="nav-link" data-scroll-target="#writing-the-r-function"><span class="header-section-number">3</span> Writing the <code>R</code> function</a></li>
+  <li><a href="#creating-a-charge-profile-along-the-ph-scale" id="toc-creating-a-charge-profile-along-the-ph-scale" class="nav-link" data-scroll-target="#creating-a-charge-profile-along-the-ph-scale"><span class="header-section-number">4</span> Creating a charge profile along the pH scale</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Calculating the net charge of a peptide</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sven Van Bael </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 27, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="packages-used" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="packages-used"><span class="header-section-number">1</span> Packages used</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="introduction" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">2</span> Introduction</h2>
+<p>A lot of my academic work involved peptides, which are in essence short proteins that are typically around 5 to 20 amino acids long. A major part of my (post)doctoral project was using mass spectrometry to identify and quantify peptides in biological samples. A fundamental principle of mass spectrometry is that it measures the mass-to-charge ratios (m/z) of everything it was able to measure in a sample. Consequently, for quantification purposes I need to input the mass-to-charge ratios of my peptides of interest into the machine. While calculating the monoisotopic mass of a peptide is straightforward (summing the individual amino acid masses that make up the peptide), calculating the charge at a certain pH is slightly less trivial.</p>
+<p>The method described below is based on two publications by <span class="citation" data-cites="moore1985">Moore (<a href="#ref-moore1985" role="doc-biblioref">1985</a>)</span> and <span class="citation" data-cites="cameselle1986">Cameselle et al. (<a href="#ref-cameselle1986" role="doc-biblioref">1986</a>)</span>.</p>
+<section id="sec-ion_groups" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="sec-ion_groups"><span class="header-section-number">2.1</span> Identifying all ionizable groups within a peptide</h3>
+<p>Contributing to the overall charge of a peptide are: the <strong>N-terminus</strong> (amino group), the <strong>C-terminus</strong> (carboxyl group), and the amino acids that have ionisable side chains: <strong>lysine</strong> (amino group), <strong>arginine</strong> (guanidino group), <strong>histidine</strong> (imidazole), <strong>glutamic acid</strong> (carboxyl group), <strong>aspartic acid</strong> (carboxyl group), <strong>cysteine</strong> (sulfhydryl) and <strong>tyrosine</strong> (phenol group). For amino acids, these can be divided into two types:</p>
+<ol type="1">
+<li>Groups that have no charge at low pH and become negatively charged at high pH: carboxyl (COOH/COO<sup>-</sup>), sulfhydryl (SH/S<sup>-</sup>), and phenol (PhOH/PhO<sup>-</sup>).</li>
+<li>Groups that are positively charged at low pH and become neutral at high pH: amino (NH<sub>3</sub><sup>+</sup>/NH<sub>3</sub>), guanidino (guanidino<sup>+</sup>/guanidino), and imidazole (imidazole<sup>+</sup>/imidazole).</li>
+</ol>
+<p>If the charge of each of the aforementioned groups is known, the charge <span class="math inline">\(Z\)</span> of a peptide at a given pH can simply be calculated by summing all the individual charges:</p>
+<p><span id="eq-simple_Z"><span class="math display">\[
+Z_{peptide} = Z_{N-term} + Z_{C-term} + n\cdot Z_{Lys} + n\cdot Z_{Arg} + n\cdot Z_{His} + n\cdot Z_{Glu} + n\cdot Z_{Asp} + n\cdot Z_{Cys} + n\cdot Z_{Tyr}
+\tag{1}\]</span></span></p>
+<p>Where <span class="math inline">\(n\)</span> is the number of each corresponding amino acid present in the peptide.</p>
+<p>The question now is: how to calculate the charge <span class="math inline">\(Z\)</span> for each element in question?</p>
+</section>
+<section id="calculating-the-fraction-of-chargedneutral-molecules" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="calculating-the-fraction-of-chargedneutral-molecules"><span class="header-section-number">2.2</span> Calculating the fraction of charged/neutral molecules</h3>
+<p>The Henderson-Hasselbalch equation states that the pH of a solution can be calculated from the acid dissociation constant (<span class="math inline">\(pK_a\)</span>)and the concentration of dissociated (<span class="math inline">\(A^-\)</span>) and undissociated (<span class="math inline">\(HA\)</span>) molecules.</p>
+<p><span id="eq-Hen_Has"><span class="math display">\[
+pH = pK_a + log \frac{[A^-]}{[HA]}
+\tag{2}\]</span></span></p>
+<p>Which can be rewritten as:</p>
+<p><span id="eq-Hen_Has_rearr"><span class="math display">\[
+10^{pH-pK_a}=\frac{[A^-]}{[HA]}
+\tag{3}\]</span></span></p>
+<p>If you express the total number of molecules in solution as 100%, this means that <span class="math inline">\([A^-]+[HA]=1\)</span> or, when rewritten: <span class="math inline">\([HA]=1-[A^-]\)</span>. Plugging this into <a href="#eq-Hen_Has_rearr" class="quarto-xref">Equation&nbsp;3</a> results in:</p>
+<p><span id="eq-diss_Hen_Has"><span class="math display">\[
+10^{pH-pK_a} = \frac{[A^-]}{1-[A^-]}
+\tag{4}\]</span></span></p>
+<p>Rearranging for <span class="math inline">\([A^-]\)</span> gives:</p>
+<p><span id="eq-diss"><span class="math display">\[
+[A^-] = \frac{1}{10^{pK_a-pH} + 1}
+\tag{5}\]</span></span></p>
+<p>And since it was earlier established that <span class="math inline">\([HA] = 1 - [A^-]\)</span>:</p>
+<p><span id="eq-undiss"><span class="math display">\[
+\begin{align*}
+[HA] &amp;= 1 - \frac{1}{10^{pK_a-pH}+1}
+\\
+[HA] &amp;= \frac{1}{10^{pH-pK_a}+1}
+\end{align*}
+\tag{6}\]</span></span></p>
+</section>
+<section id="using-the-a--and-ha-fractions-to-calculate-overall-charge" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="using-the-a--and-ha-fractions-to-calculate-overall-charge"><span class="header-section-number">2.3</span> Using the <span class="math inline">\([A^-]\)</span> and <span class="math inline">\([HA]\)</span> fractions to calculate overall charge</h3>
+<p>In <a href="#sec-ion_groups" class="quarto-xref">Section&nbsp;2.1</a>, the distinction was made between the ionizable groups within a peptide that have a <strong>negative charge when dissociated</strong> versus those that have a <strong>positive charge when undissociated</strong>. Using the formulas derived from the Henderson-Hasselbalch equation, each fraction can now be calculated.</p>
+<p>Let’s take the C-terminus as an example: the <span class="math inline">\(pK_a\)</span> of an amino acid carboxyl group is ~3.5, and has a negative charge when dissociated, so the formula for <span class="math inline">\(A^-\)</span> is used to calculate the fraction of dissociated molecules. Taking a pH of 7 as example, this gives:</p>
+<p><span id="eq-example_diss"><span class="math display">\[
+\begin{align*}
+[A^-] &amp;= \frac{1}{10^{pK_a-pH}+1}
+\\
+&amp;= \frac{1}{10^{3.5-7}+1}
+\\
+&amp;= 99.9\%
+\end{align*}
+\tag{7}\]</span></span></p>
+<p>So 99.9% of the time, the carboxyl group is in the dissociated form (COO<sup>-</sup>) at pH = 7. Since the charge of a dissociated carboxyl group equals -1, the mean charge <span class="math inline">\(Z_{C-term}\)</span> is <span class="math inline">\(0.999 \times -1 = -0.999\)</span> at pH = 7. Note that the 0.01% that is in the undissociated COOH form is not ionized, and therefore does not contribute to the overall charge.</p>
+<p>The same principle can be applied to the N-terminus, but as this group only carries a charge when undissociated, the formula for <span class="math inline">\([HA]\)</span> is used:</p>
+<p><span id="eq-example_undiss"><span class="math display">\[
+\begin{align*}
+[HA] &amp;= \frac{1}{10^{pH-pK_a}+1}
+\\
+&amp;= \frac{1}{10^{7-7.5} + 1}
+\\
+&amp;= 76\%
+\end{align*}
+\tag{8}\]</span></span></p>
+<p>With 76% of the molecules in the positively charged nondissociated form (NH<sub>3</sub><sup>+</sup>), the mean charge <span class="math inline">\(Z_{N-term}\)</span> equals <span class="math inline">\(0.76 \times 1 = 0.76\)</span> at pH = 7. Again, the 24% that are in the dissociated NH<sub>2</sub> form do not carry a charge, and therefore do not contribute.</p>
+<p>If the peptide has no amino acids with ionizable side chains, <a href="#eq-simple_Z" class="quarto-xref">Equation&nbsp;1</a> can be simplified to calculate the overall charge of the peptide at pH = 7:</p>
+<p><span id="eq-example_pep_Z"><span class="math display">\[
+\begin{align*}
+Z_{peptide} &amp;= Z_{N-term} + Z_{C-term}
+\\
+&amp;= 0.76 + (-0.999)
+\\
+&amp;= -0.239
+\end{align*}
+\tag{9}\]</span></span></p>
+<p>Since the outcomes of <a href="#eq-example_diss" class="quarto-xref">Equation&nbsp;7</a> and <a href="#eq-example_undiss" class="quarto-xref">8</a> still needed to be multiplied by the value -1 or 1 for positively or negatively charged ions, <a href="#eq-diss" class="quarto-xref">Equation&nbsp;5</a> and <a href="#eq-undiss" class="quarto-xref">6</a> can be generalized as:</p>
+<p><span id="eq-general_charges"><span class="math display">\[
+\begin{align*}
+Z^- &amp;= \frac{-1}{10^{pK_a-pH}+1}
+\\
+Z^+ &amp;= \frac{1}{10^{pH-pK_a}+1}
+\end{align*}
+\tag{10}\]</span></span></p>
+</section>
+<section id="the-pka-values-of-the-termini-and-amino-acid-side-chains" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="the-pka-values-of-the-termini-and-amino-acid-side-chains"><span class="header-section-number">2.4</span> The pK<sub>a</sub> values of the termini and amino acid side chains</h3>
+<p>There are different sources available for the pKa values of N- and C-termini of amino acids and their side chains. From experience, the resource provided by <span class="citation" data-cites="bjellqvist1993">Bjellqvist et al. (<a href="#ref-bjellqvist1993" role="doc-biblioref">1993</a>)</span> has given the best results, with predicted charge states that correspond with my own empirically obtained data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_bjellqvist <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"pK values - Bjellqvist.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df_bjellqvist <span class="ot">&lt;-</span> <span class="fu">column_to_rownames</span>(df_bjellqvist, <span class="at">var =</span> <span class="st">"Single-letter code"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(df_bjellqvist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="tbl-Bjellqvist_pKa" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-Bjellqvist_pKa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Bjellqvist pK<sub>a</sub> values for termini and side chains of all 20 amino acids.
+</figcaption>
+<div aria-describedby="tbl-Bjellqvist_pKa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-c064067a08e009b0688f" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-c064067a08e009b0688f">{"x":{"filter":"none","vertical":false,"data":[["A","R","N","D","C","E","Q","G","H","I","L","K","M","F","P","S","T","W","Y","V"],["Alanine","Arginine","Asparagine","Aspartic acid","Cysteine","Glutamic acid","Glutamine","Glycine","Histidine","Isoleucine","Leucine","Lysine","Methionine","Phenylalanine","Proline","Serine","Threonine","Tryptophan","Tyrosine","Valine"],["Ala","Arg","Asn","Asp","Cys","Glu","Gln","Gly","His","Ile","Leu","Lys","Met","Phe","Pro","Ser","Thr","Trp","Tyr","Val"],[3.55,3.55,3.55,4.55,3.55,4.75,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55],[7.59,7.5,7.5,7.5,7.5,7.7,7.5,7.5,7.5,7.5,7.5,7.5,7,7.5,8.36,6.93,6.82,7.5,7.5,7.44],[null,12,null,4.05,9,4.45,null,null,5.98,null,null,10,null,null,null,null,null,null,10,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>Abbreviation<\/th>\n      <th>pK1<\/th>\n      <th>pK2<\/th>\n      <th>pKr<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Name","targets":1},{"name":"Abbreviation","targets":2},{"name":"pK1","targets":3},{"name":"pK2","targets":4},{"name":"pKr","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="writing-the-r-function" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="writing-the-r-function"><span class="header-section-number">3</span> Writing the <code>R</code> function</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>computeCharge <span class="ot">&lt;-</span> <span class="cf">function</span>(Peptide, pH){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Get amino acid composition from peptide</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  pept <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">str_split</span>(Peptide, <span class="st">""</span>))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  compoAA <span class="ot">&lt;-</span> pept <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">factor</span>(., <span class="at">levels =</span> LETTERS) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">table</span>(.)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Get the N-terminal and C-terminal amino acid</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  nTermAA <span class="ot">&lt;-</span> pept[<span class="dv">1</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  cTermAA <span class="ot">&lt;-</span> pept[<span class="fu">length</span>(pept)]</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Calculate charge for N- and C-termini and amino acid residues</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  cter <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(df_bjellqvist[cTermAA, <span class="st">"pK1"</span>] <span class="sc">-</span> pH) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  nter <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(pH <span class="sc">-</span> df_bjellqvist[nTermAA, <span class="st">"pK2"</span>]) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  carg <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(compoAA[<span class="st">'R'</span>] <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(pH <span class="sc">-</span> df_bjellqvist[<span class="st">"R"</span>, <span class="st">"pKr"</span>]) <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  chis <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(compoAA[<span class="st">'H'</span>] <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(pH <span class="sc">-</span> df_bjellqvist[<span class="st">"H"</span>, <span class="st">"pKr"</span>]) <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  clys <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(compoAA[<span class="st">'K'</span>] <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(pH <span class="sc">-</span> df_bjellqvist[<span class="st">"K"</span>, <span class="st">"pKr"</span>]) <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  casp <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(compoAA[<span class="st">'D'</span>] <span class="sc">*</span> (<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(df_bjellqvist[<span class="st">'D'</span>, <span class="st">"pKr"</span>] <span class="sc">-</span> pH) <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  cglu <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(compoAA[<span class="st">'E'</span>] <span class="sc">*</span> (<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(df_bjellqvist[<span class="st">'E'</span>, <span class="st">"pKr"</span>] <span class="sc">-</span> pH) <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  ccys <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(compoAA[<span class="st">'C'</span>] <span class="sc">*</span> (<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(df_bjellqvist[<span class="st">'C'</span>, <span class="st">"pKr"</span>] <span class="sc">-</span> pH) <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  ctyr <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(compoAA[<span class="st">'Y'</span>] <span class="sc">*</span> (<span class="sc">-</span><span class="dv">1</span><span class="sc">/</span>(<span class="dv">10</span><span class="sc">^</span>(df_bjellqvist[<span class="st">'Y'</span>, <span class="st">"pKr"</span>] <span class="sc">-</span> pH) <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  charge <span class="ot">&lt;-</span> cter <span class="sc">+</span> casp <span class="sc">+</span> cglu <span class="sc">+</span> ccys <span class="sc">+</span> ctyr <span class="sc">+</span> nter <span class="sc">+</span> carg <span class="sc">+</span> chis <span class="sc">+</span> clys</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(charge)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="creating-a-charge-profile-along-the-ph-scale" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="creating-a-charge-profile-along-the-ph-scale"><span class="header-section-number">4</span> Creating a charge profile along the pH scale</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Define example peptide</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pept_1 <span class="ot">&lt;-</span> <span class="st">"EASAFGDIIGELKGKGLGGRMRF"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Iterate the computeCharge function over the entire pH scale</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>df_pH <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">"pH"</span> <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">14</span>, <span class="fl">0.2</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Charge"</span> <span class="ot">=</span> <span class="fu">sapply</span>(pH, computeCharge, <span class="at">Peptide =</span> pept_1))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Set maximum of the pH axis</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>y_scale <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">abs</span>(df_pH<span class="sc">$</span>Charge)) <span class="sc">%&gt;%</span> <span class="fu">ceiling</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Plot</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_pH) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">7</span>, <span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> pH, <span class="at">y =</span> Charge)) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">14</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">14</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>y_scale, y_scale), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span>y_scale, y_scale, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">#labs(title = pept_1) +</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Pep_net_charge_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-bjellqvist1993" class="csl-entry" role="listitem">
+Bjellqvist, B., Hughes, G. J., Pasquali, C., Paquet, N., Ravier, F., Sanchez, J.-C., Frutiger, S., &amp; Hochstrasser, D. (1993). The focusing positions of polypeptides in immobilized pH gradients can be predicted from their amino acid sequences. <em>ELECTROPHORESIS</em>, <em>14</em>(1), 1023–1031. <a href="https://doi.org/10.1002/elps.11501401163">https://doi.org/10.1002/elps.11501401163</a>
+</div>
+<div id="ref-cameselle1986" class="csl-entry" role="listitem">
+Cameselle, J. C., Meireles Ribeiro, J., &amp; Sillero, A. (1986). Derivation and use of a formula to calculate the net charge of acid-base compounds. Its application to amino acids, proteins and nucleotides. <em>Biochemical Education</em>, <em>14</em>(3), 131–136. <a href="https://doi.org/10.1016/0307-4412(86)90176-7">https://doi.org/10.1016/0307-4412(86)90176-7</a>
+</div>
+<div id="ref-moore1985" class="csl-entry" role="listitem">
+Moore, D. S. (1985). Amino acid and peptide net charges: A simple calculational procedure. <em>Biochemical Education</em>, <em>13</em>(1), 10–11. <a href="https://doi.org/10.1016/0307-4412(85)90114-1">https://doi.org/10.1016/0307-4412(85)90114-1</a>
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

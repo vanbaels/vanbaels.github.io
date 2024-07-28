@@ -10,6 +10,8 @@ format:
 editor: visual
 ---
 
+## Introduction
+
 Many people will be familiar with Lego, the popular construction sets with interlocking brightly coloured plastic bricks. In the later years, Lego marketing has successfully targeted a more adult audience (including myself), with sets that are more intricate and detailed. Every Lego fan, or who knows Lego fans (be it a child or an adult) will also know the sometimes hefty price ranges, especially for the "adult" sets, and those under an intellectual property license (think of Star Wars, Marvel, Minecraft, etc.).
 
 Thanks to the `R` package [`brickset`](https://github.com/jbryer/brickset) I was able to collect data on all Lego sets released during 2018 and 2024, with variables such as set theme, intellectual property license, number of pieces, retail price, etc. By exploring this data set I was curious if I could find an answer to some questions:
