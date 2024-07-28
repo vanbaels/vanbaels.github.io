@@ -85,7 +85,7 @@ $$ {#eq-undiss}
 
 In @sec-ion_groups, the distinction was made between the ionizable groups within a peptide that have a **negative charge when dissociated** versus those that have a **positive charge when undissociated**. Using the formulas derived from the Henderson-Hasselbalch equation, each fraction can now be calculated.
 
-Let's take the C-terminus as an example: the $pK_a$ of an amino acid carboxyl group is \~3.5, and has a negative charge when dissociated, so the formula for $A^-$ is used to calculate the fraction of dissociated molecules. Taking a pH of 7 as example, this gives:
+Let's take the C-terminus as an example: the $pK_a$ of an amino acid carboxyl group is \~3.5, and has a negative charge when dissociated, so the formula for $[A^-]$ is used to calculate the fraction of dissociated molecules. With a pH of 7 as example, this gives:
 
 $$
 \begin{align*}
@@ -113,7 +113,7 @@ $$ {#eq-example_undiss}
 
 With 76% of the molecules in the positively charged nondissociated form (NH~3~^+^), the mean charge $Z_{N-term}$ equals $0.76 \times 1 = 0.76$ at pH = 7. Again, the 24% that are in the dissociated NH~2~ form do not carry a charge, and therefore do not contribute.
 
-If the peptide has no amino acids with ionizable side chains, @eq-simple_Z can be simplified to calculate the overall charge of the peptide at pH = 7:
+Calculating the charges carried by the amino acid side chains is analogous. For this example, the peptide has no amino acids with ionizable side chains, so @eq-simple_Z can be simplified to calculate the overall charge of the peptide at pH = 7:
 
 $$
 \begin{align*}
@@ -137,14 +137,13 @@ $$ {#eq-general_charges}
 
 ### The pK~a~ values of the termini and amino acid side chains
 
-There are different sources available for the pKa values of N- and C-termini of amino acids and their side chains. From experience, the resource provided by @bjellqvist1993 has given the best results, with predicted charge states that correspond with my own empirically obtained data.
+There are different sources available for the pKa values of N- and C-termini of amino acids and their side chains. From experience, the resource provided by @bjellqvist1993 has given the best results, with predicted charge states that correspond well with my own empirically obtained data.
 
 ```{r}
 #| collapse: true
 #| warning: false
 #| label: tbl-Bjellqvist_pKa
 #| tbl-cap: 'Bjellqvist pK~a~ values for termini and side chains of all 20 amino acids.'
-
 
 df_bjellqvist <- read_csv("pK values - Bjellqvist.csv")
 df_bjellqvist <- column_to_rownames(df_bjellqvist, var = "Single-letter code")
@@ -196,7 +195,7 @@ pept_1 <- "EASAFGDIIGELKGKGLGGRMRF"
 df_pH <- tibble("pH" = seq(0, 14, 0.2),
                 "Charge" = sapply(pH, computeCharge, Peptide = pept_1))
 
-#Set maximum of the pH axis
+#Set maximum of the charge axis
 y_scale <- max(abs(df_pH$Charge)) %>% ceiling()
 
 #Plot
@@ -206,13 +205,13 @@ ggplot(df_pH) +
   geom_line(aes(x = pH, y = Charge)) +
   scale_x_continuous(limits = c(0, 14), breaks = seq(0, 14, 1)) +
   scale_y_continuous(limits = c(-y_scale, y_scale), breaks = seq(-y_scale, y_scale, 1)) +
-  #labs(title = pept_1) +
+  labs(title = pept_1) +
   theme_bw() +
   theme(panel.grid = element_blank(),
         legend.position = "none",
-        axis.text = element_text(size = 14, color = "black"),
-        axis.title = element_text(size = 16, face = "bold"),
-        plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
+        axis.text = element_text(size = 16, color = "black"),
+        axis.title = element_text(size = 18, face = "bold"),
+        plot.title = element_text(hjust = 0.5, size = 18, face = "bold"))
 
 
 

@@ -1,21 +1,21 @@
 ﻿Name,Abbreviation,Single-letter code,pK1,pK2,pKr
 Alanine,Ala,A,3.55,7.59,
-Arginine,Arg,R,3.55,7.5,12
-Asparagine,Asn,N,3.55,7.5,
-Aspartic acid,Asp,D,4.55,7.5,4.05
-Cysteine,Cys,C,3.55,7.5,9
-Glutamic acid,Glu,E,4.75,7.7,4.45
-Glutamine,Gln,Q,3.55,7.5,
-Glycine,Gly,G,3.55,7.5,
-Histidine,His,H,3.55,7.5,5.98
-Isoleucine,Ile,I,3.55,7.5,
-Leucine,Leu,L,3.55,7.5,
-Lysine,Lys,K,3.55,7.5,10
-Methionine,Met,M,3.55,7,
-Phenylalanine,Phe,F,3.55,7.5,
+Arginine,Arg,R,3.55,7.50,12.00
+Asparagine,Asn,N,3.55,7.50,
+Aspartic acid,Asp,D,4.55,7.50,4.05
+Cysteine,Cys,C,3.55,7.50,9.00
+Glutamic acid,Glu,E,4.75,7.70,4.45
+Glutamine,Gln,Q,3.55,7.50,
+Glycine,Gly,G,3.55,7.50,
+Histidine,His,H,3.55,7.50,5.98
+Isoleucine,Ile,I,3.55,7.50,
+Leucine,Leu,L,3.55,7.50,
+Lysine,Lys,K,3.55,7.50,10.00
+Methionine,Met,M,3.55,7.00,
+Phenylalanine,Phe,F,3.55,7.50,
 Proline,Pro,P,3.55,8.36,
 Serine,Ser,S,3.55,6.93,
 Threonine,Thr,T,3.55,6.82,
-Tryptophan,Trp,W,3.55,7.5,
-Tyrosine,Tyr,Y,3.55,7.5,10
+Tryptophan,Trp,W,3.55,7.50,
+Tyrosine,Tyr,Y,3.55,7.50,10.00
 Valine,Val,V,3.55,7.44,
