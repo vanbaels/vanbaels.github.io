@@ -125,7 +125,7 @@ Z_{peptide} &= Z_{N-term} + Z_{C-term}
 \end{align*}
 $$ {#eq-example_pep_Z}
 
-Since the outcomes of @eq-example_diss and [-@eq-example_undiss] still needed to be multiplied by the value -1 or 1 for positively or negatively charged ions, @eq-diss and [-@eq-undiss] can be generalized as:
+Since the outcomes of @eq-example_diss and [-@eq-example_undiss] still needed to be multiplied by the value 1 or -1 for positively or negatively charged ions, @eq-diss and [-@eq-undiss] can be generalized as:
 
 $$
 \begin{align*}
