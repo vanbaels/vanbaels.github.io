@@ -1,30 +1,14 @@
 [
   {
-    "listing": "/Personal_data_science_projects/dataprojects-DESKTOP-0HBNO0S.html",
-    "items": [
-      "/Personal_data_science_projects/posts/LegoSetPrices.html"
-    ]
-  },
-  {
-    "listing": "/Academic_work/academicwork.html",
-    "items": []
-  },
-  {
-    "listing": "/Personal_data_science_projects/dataprojects.html",
-    "items": [
-      "/Personal_data_science_projects/posts/LegoSetPrices.html"
-    ]
-  },
-  {
     "listing": "/Academic_work/academic_work.html",
     "items": [
-      "/Academic_work/posts/Pep_net_charge.html"
+      "/Academic_work/posts/PepNetCharge/PepNetCharge.html"
     ]
   },
   {
     "listing": "/Personal_projects/personal_projects.html",
     "items": [
-      "/Personal_projects/posts/LegoSetPrices.html"
+      "/Personal_projects/posts/LegoSetPrices/LegoSetPrices.html"
     ]
   }
 ]

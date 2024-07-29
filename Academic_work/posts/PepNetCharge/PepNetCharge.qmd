@@ -12,6 +12,8 @@ csl: apa.csl
 bibliography: references.bib
 ---
 
+This post starts with an introduction on how all the formulas for charge calculation were derived. If you want to go directly to writing the function in `R`, that starts in @sec-writing-the-r-function
+
 ## Packages used
 
 ```{r}
@@ -38,7 +40,9 @@ Contributing to the overall charge of a peptide are: the **N-terminus** (amino g
 If the charge of each of the aforementioned groups is known, the charge $Z$ of a peptide at a given pH can simply be calculated by summing all the individual charges:
 
 $$
-Z_{peptide} = Z_{N-term} + Z_{C-term} + n\cdot Z_{Lys} + n\cdot Z_{Arg} + n\cdot Z_{His} + n\cdot Z_{Glu} + n\cdot Z_{Asp} + n\cdot Z_{Cys} + n\cdot Z_{Tyr}
+\begin{align*}
+& Z_{peptide} = Z_{N-term} + Z_{C-term} + n\cdot Z_{Lys} + n\cdot Z_{Arg} + n\cdot Z_{His} + n\cdot Z_{Glu} + n\cdot Z_{Asp} + n\cdot Z_{Cys} + n\cdot Z_{Tyr}
+\end{align*}
 $$ {#eq-simple_Z}
 
 Where $n$ is the number of each corresponding amino acid present in the peptide.
@@ -83,7 +87,7 @@ $$ {#eq-undiss}
 
 ### Using the $[A^-]$ and $[HA]$ fractions to calculate overall charge
 
-In @sec-ion_groups, the distinction was made between the ionizable groups within a peptide that have a **negative charge when dissociated** versus those that have a **positive charge when undissociated**. Using the formulas derived from the Henderson-Hasselbalch equation, each fraction can now be calculated.
+In @sec-ion_groups, the distinction was made between the ionizable groups within a peptide that have a **negative charge (-1) when dissociated** versus those that have a **positive charge (+1) when undissociated**. Using the formulas derived from the Henderson-Hasselbalch equation, each fraction can now be calculated.
 
 Let's take the C-terminus as an example: the $pK_a$ of an amino acid carboxyl group is \~3.5, and has a negative charge when dissociated, so the formula for $[A^-]$ is used to calculate the fraction of dissociated molecules. With a pH of 7 as example, this gives:
 
@@ -111,7 +115,7 @@ $$
 \end{align*}
 $$ {#eq-example_undiss}
 
-With 76% of the molecules in the positively charged nondissociated form (NH~3~^+^), the mean charge $Z_{N-term}$ equals $0.76 \times 1 = 0.76$ at pH = 7. Again, the 24% that are in the dissociated NH~2~ form do not carry a charge, and therefore do not contribute.
+With 76% of the molecules in the positively charged nondissociated form (NH~3~^+^), the mean charge $Z_{N-term}$ equals $0.76 \times (+1) = 0.76$ at pH = 7. Again, the 24% that are in the dissociated NH~2~ form do not carry a charge, and therefore do not contribute.
 
 Calculating the charges carried by the amino acid side chains is analogous. For this example, the peptide has no amino acids with ionizable side chains, so @eq-simple_Z can be simplified to calculate the overall charge of the peptide at pH = 7:
 
@@ -131,13 +135,13 @@ $$
 \begin{align*}
 Z^- &= \frac{-1}{10^{pK_a-pH}+1}
 \\
-Z^+ &= \frac{1}{10^{pH-pK_a}+1}
+Z^+ &= \frac{+1}{10^{pH-pK_a}+1}
 \end{align*}
 $$ {#eq-general_charges}
 
 ### The pK~a~ values of the termini and amino acid side chains
 
-There are different sources available for the pKa values of N- and C-termini of amino acids and their side chains. From experience, the resource provided by @bjellqvist1993 has given the best results, with predicted charge states that correspond well with my own empirically obtained data.
+There are different sources available for the pK~a~ values of N- and C-termini of amino acids and their side chains. From experience, the resource provided by @bjellqvist1993 has given the best results, with predicted charge states that correspond well with my own empirically obtained data.
 
 ```{r}
 #| collapse: true
@@ -152,44 +156,107 @@ datatable(df_bjellqvist)
 
 ------------------------------------------------------------------------
 
-## Writing the `R` function
+## Writing the `R` function {#sec-writing-the-r-function}
+
+Using the formulas in [-@eq-general_charges] and the pK~a~ information from Bjellqvist, I created the function `computeCharge` that calculates the net charge of a peptide at a given pH.
 
 ```{r}
+#| collapse: true
+#| warning: false
+
 computeCharge <- function(Peptide, pH){
   #Get amino acid composition from peptide
   pept <- unlist(str_split(Peptide, ""))
-  compoAA <- pept %>%
+  if (sum(!pept %in% rownames(df_bjellqvist)) > 0){
+    #Abort function when the Peptide string contains letters that do not correspond with an amino acid.
+    warning("Peptide string contains unknown amino acid character(s). Please check.")
+  } else {
+    compoAA <- pept %>%
     factor(., levels = LETTERS) %>%
-    table(.)
+    table()
   
-  #Get the N-terminal and C-terminal amino acid
-  nTermAA <- pept[1]
-  cTermAA <- pept[length(pept)]
+    #Get the N-terminal and C-terminal amino acid
+    nTermAA <- pept[1]
+    cTermAA <- pept[length(pept)]
   
-  #Calculate charge for N- and C-termini and amino acid residues
-  cter <- -1/(10^(df_bjellqvist[cTermAA, "pK1"] - pH) + 1)
-  nter <- 1/(10^(pH - df_bjellqvist[nTermAA, "pK2"]) + 1)
+    #Calculate charge for N- and C-termini and amino acid residues with the pKa information from df_bjellqvist
+    cter <- -1/(10^(df_bjellqvist[cTermAA, "pK1"] - pH) + 1)
+    nter <- 1/(10^(pH - df_bjellqvist[nTermAA, "pK2"]) + 1)
   
-  carg <- as.vector(compoAA['R'] * (1/(10^(pH - df_bjellqvist["R", "pKr"]) + 1)))
-  chis <- as.vector(compoAA['H'] * (1/(10^(pH - df_bjellqvist["H", "pKr"]) + 1)))
-  clys <- as.vector(compoAA['K'] * (1/(10^(pH - df_bjellqvist["K", "pKr"]) + 1)))
+    carg <- as.vector(compoAA['R'] * (1/(10^(pH - df_bjellqvist["R", "pKr"]) + 1)))
+    chis <- as.vector(compoAA['H'] * (1/(10^(pH - df_bjellqvist["H", "pKr"]) + 1)))
+    clys <- as.vector(compoAA['K'] * (1/(10^(pH - df_bjellqvist["K", "pKr"]) + 1)))
   
-  casp <- as.vector(compoAA['D'] * (-1/(10^(df_bjellqvist['D', "pKr"] - pH) + 1)))
-  cglu <- as.vector(compoAA['E'] * (-1/(10^(df_bjellqvist['E', "pKr"] - pH) + 1)))
-  ccys <- as.vector(compoAA['C'] * (-1/(10^(df_bjellqvist['C', "pKr"] - pH) + 1)))
-  ctyr <- as.vector(compoAA['Y'] * (-1/(10^(df_bjellqvist['Y', "pKr"] - pH) + 1)))
+    casp <- as.vector(compoAA['D'] * (-1/(10^(df_bjellqvist['D', "pKr"] - pH) + 1)))
+    cglu <- as.vector(compoAA['E'] * (-1/(10^(df_bjellqvist['E', "pKr"] - pH) + 1)))
+    ccys <- as.vector(compoAA['C'] * (-1/(10^(df_bjellqvist['C', "pKr"] - pH) + 1)))
+    ctyr <- as.vector(compoAA['Y'] * (-1/(10^(df_bjellqvist['Y', "pKr"] - pH) + 1)))
   
-  charge <- cter + casp + cglu + ccys + ctyr + nter + carg + chis + clys
-  return(charge)
+    charge <- cter + casp + cglu + ccys + ctyr + nter + carg + chis + clys
+    return(charge)
+  }
 }
 ```
 
-## Creating a charge profile along the pH scale
+Let's test the function using the peptide sequence DGLDAASYYAPVR, which is part of a standard for retention time calibration [@escher2012]. Typically, samples for mass spectrometric analyses are dissolved in a highly acidic buffer containing 0.1% formic acid, which has a pH of \~2.7, so this value will be used as input.
 
 ```{r}
+#| collapse: true
+#| warning: false
+
+computeCharge("DGLDAASYYAPVR", 2.7)
+```
+
+The value of `r computeCharge("DGLDAASYYAPVR", 2.7) %>% round(., 2)` can be interpreted that there both are molecules with charge +1 and charge +2 present, but since the calculated charge is closer to +2, the vast majority will be doubly charged. If necessary, the ratio $f$ of doubly charged molecules can be calculated as follows:
+
+$$
+\begin{align*}
+f \times (+2) + (1-f) \times (+1) &= 1.79
+\\
+2f - f + 1 &= 1.79
+\\
+f &= 0.79
+\end{align*}
+$$
+
+Hence, 79% of the molecules are doubly charged while 21% (1 - 0.79 = 0.21) are singly charged.
+
+In a second example, let's test the peptide ECCHGDLLECADDR, which originates from the bovine serum albumin protein (BSA).
+
+```{r}
+#| collapse: true
+#| warning: false
+
+computeCharge("ECCHGDLLECADDR", 2.7)
+```
+
+Again, the majority of this peptide will be triply charged. The exact ratios can be calculated as before, but now for +2 and +3 charges:
+
+$$
+\begin{align*}
+f \times (+3) + (1 - f) \times (+2) &= 2.71
+\\
+3f+2-2f &= 2.71
+\\
+f &= 0.71
+\end{align*}
+$$
+
+So 71% of this peptide occurs as triply charged, with 29% being doubly charged.
+
+## Creating a charge profile along the pH scale
+
+In some situations, it can be interesting to see how the charge of a peptide changes over the pH range. For this purpose, I used my `computeCharge` function to plot a charge profile. As an example peptide, I used EAVSEILETSR, a peptide tag described by @vandemoortele2016.
+
+```{r}
+#| collapse: true
+#| warning: false
+#| fig-asp: 1
+#| label: fig-EAV_profile
+#| fig-cap: 'Charge profile of EAVSEILETSR along the pH scale'
 
 #Define example peptide
-pept_1 <- "EASAFGDIIGELKGKGLGGRMRF"
+pept_1 <- "EAVSEILETSR"
 
 #Iterate the computeCharge function over the entire pH scale
 df_pH <- tibble("pH" = seq(0, 14, 0.2),
@@ -200,19 +267,15 @@ y_scale <- max(abs(df_pH$Charge)) %>% ceiling()
 
 #Plot
 ggplot(df_pH) +
-  geom_hline(yintercept = 0, color = "gray", lty = 2) +
-  geom_vline(xintercept = 7, color = "gray", lty = 2) +
-  geom_line(aes(x = pH, y = Charge)) +
+  geom_hline(yintercept = 0, color = "#565253", lty = 2) +
+  geom_vline(xintercept = 7, color = "#565253", lty = 2) +
+  geom_line(aes(x = pH, y = Charge), color = "#033e57") +
   scale_x_continuous(limits = c(0, 14), breaks = seq(0, 14, 1)) +
   scale_y_continuous(limits = c(-y_scale, y_scale), breaks = seq(-y_scale, y_scale, 1)) +
   labs(title = pept_1) +
-  theme_bw() +
-  theme(panel.grid = element_blank(),
-        legend.position = "none",
-        axis.text = element_text(size = 16, color = "black"),
+  theme_classic() +
+  theme(axis.text = element_text(size = 16, color = "black"),
         axis.title = element_text(size = 18, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 18, face = "bold"))
-
-
 
 ```

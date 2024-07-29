@@ -46,5 +46,11 @@
   },
   "Academic_work/posts/test.qmd": {
     "test.html": "eba14cc7"
+  },
+  "Academic_work/posts/PepNetCharge/PepNetCharge.qmd": {
+    "PepNetCharge.html": "a7d7059f"
+  },
+  "Personal_projects/posts/LegoSetPrices/LegoSetPrices.qmd": {
+    "LegoSetPrices.html": "599ed125"
   }
 }
