@@ -179,11 +179,6 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">CV</span>
-    </span>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../../Personal_projects/personal_projects.html"> 
 <span class="menu-text">Personal projects</span></a>
   </li>  
@@ -215,7 +210,7 @@ window.Quarto = {
   <li><a href="#using-the-a--and-ha-fractions-to-calculate-overall-charge" id="toc-using-the-a--and-ha-fractions-to-calculate-overall-charge" class="nav-link" data-scroll-target="#using-the-a--and-ha-fractions-to-calculate-overall-charge"><span class="header-section-number">2.3</span> Using the <span class="math inline">\([A^-]\)</span> and <span class="math inline">\([HA]\)</span> fractions to calculate overall charge</a></li>
   <li><a href="#the-pka-values-of-the-termini-and-amino-acid-side-chains" id="toc-the-pka-values-of-the-termini-and-amino-acid-side-chains" class="nav-link" data-scroll-target="#the-pka-values-of-the-termini-and-amino-acid-side-chains"><span class="header-section-number">2.4</span> The pK<sub>a</sub> values of the termini and amino acid side chains</a></li>
   </ul></li>
-  <li><a href="#sec-writing-the-r-function" id="toc-sec-writing-the-r-function" class="nav-link" data-scroll-target="#sec-writing-the-r-function"><span class="header-section-number">3</span> Writing the <code>R</code> function</a></li>
+  <li><a href="#sec-writing-the-r-function" id="toc-sec-writing-the-r-function" class="nav-link" data-scroll-target="#sec-writing-the-r-function"><span class="header-section-number">3</span> Creating the <code>R</code> function</a></li>
   <li><a href="#creating-a-charge-profile-along-the-ph-scale" id="toc-creating-a-charge-profile-along-the-ph-scale" class="nav-link" data-scroll-target="#creating-a-charge-profile-along-the-ph-scale"><span class="header-section-number">4</span> Creating a charge profile along the pH scale</a></li>
   </ul>
 </nav>
@@ -254,7 +249,7 @@ window.Quarto = {
 </header>
 
 
-<p>This post starts with an introduction on how all the formulas for charge calculation were derived. If you want to go directly to writing the function in <code>R</code>, that starts in <a href="#sec-writing-the-r-function" class="quarto-xref">Section&nbsp;3</a></p>
+<p>This post starts with a quite extensive introduction on how all the formulas for the charge calculations were derived. If you want to see the <code>R</code> code directly, go to <a href="#sec-writing-the-r-function" class="quarto-xref">Section&nbsp;3</a>.</p>
 <section id="packages-used" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="packages-used"><span class="header-section-number">1</span> Packages used</h2>
 <div class="cell">
@@ -276,11 +271,24 @@ window.Quarto = {
 <p>If the charge of each of the aforementioned groups is known, the charge <span class="math inline">\(Z\)</span> of a peptide at a given pH can simply be calculated by summing all the individual charges:</p>
 <p><span id="eq-simple_Z"><span class="math display">\[
 \begin{align*}
-&amp; Z_{peptide} = Z_{N-term} + Z_{C-term} + n\cdot Z_{Lys} + n\cdot Z_{Arg} + n\cdot Z_{His} + n\cdot Z_{Glu} + n\cdot Z_{Asp} + n\cdot Z_{Cys} + n\cdot Z_{Tyr}
+Z_{peptide} = Z_{N-term} &amp;+ Z_{C-term}
+\\
+&amp; + n\cdot Z_{Lys}
+\\
+&amp; + n\cdot Z_{Arg}
+\\
+&amp; + n\cdot Z_{His}
+\\
+&amp; + n\cdot Z_{Glu}
+\\
+&amp; + n\cdot Z_{Asp}
+\\
+&amp; + n\cdot Z_{Cys}
+\\
+&amp; + n\cdot Z_{Tyr}
 \end{align*}
 \tag{1}\]</span></span></p>
-<p>Where <span class="math inline">\(n\)</span> is the number of each corresponding amino acid present in the peptide.</p>
-<p>The question now is: how to calculate the charge <span class="math inline">\(Z\)</span> for each element in question?</p>
+<p>Where <span class="math inline">\(n\)</span> is the number of each corresponding amino acid present in the peptide. The question now is: how to calculate the charge <span class="math inline">\(Z\)</span> for each element in question?</p>
 </section>
 <section id="calculating-the-fraction-of-chargedneutral-molecules" class="level3" data-number="2.2">
 <h3 data-number="2.2" class="anchored" data-anchor-id="calculating-the-fraction-of-chargedneutral-molecules"><span class="header-section-number">2.2</span> Calculating the fraction of charged/neutral molecules</h3>
@@ -367,8 +375,8 @@ Table&nbsp;1: Bjellqvist pK<sub>a</sub> values for termini and side chains of al
 </figcaption>
 <div aria-describedby="tbl-Bjellqvist_pKa-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-9fdf20b8f9369c421b6d" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-9fdf20b8f9369c421b6d">{"x":{"filter":"none","vertical":false,"data":[["A","R","N","D","C","E","Q","G","H","I","L","K","M","F","P","S","T","W","Y","V"],["Alanine","Arginine","Asparagine","Aspartic acid","Cysteine","Glutamic acid","Glutamine","Glycine","Histidine","Isoleucine","Leucine","Lysine","Methionine","Phenylalanine","Proline","Serine","Threonine","Tryptophan","Tyrosine","Valine"],["Ala","Arg","Asn","Asp","Cys","Glu","Gln","Gly","His","Ile","Leu","Lys","Met","Phe","Pro","Ser","Thr","Trp","Tyr","Val"],[3.55,3.55,3.55,4.55,3.55,4.75,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55],[7.59,7.5,7.5,7.5,7.5,7.7,7.5,7.5,7.5,7.5,7.5,7.5,7,7.5,8.36,6.93,6.82,7.5,7.5,7.44],[null,12,null,4.05,9,4.45,null,null,5.98,null,null,10,null,null,null,null,null,null,10,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>Abbreviation<\/th>\n      <th>pK1<\/th>\n      <th>pK2<\/th>\n      <th>pKr<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Name","targets":1},{"name":"Abbreviation","targets":2},{"name":"pK1","targets":3},{"name":"pK2","targets":4},{"name":"pKr","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-09baa95dfcf8aa3c4f4a" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-09baa95dfcf8aa3c4f4a">{"x":{"filter":"none","vertical":false,"data":[["A","R","N","D","C","E","Q","G","H","I","L","K","M","F","P","S","T","W","Y","V"],["Alanine","Arginine","Asparagine","Aspartic acid","Cysteine","Glutamic acid","Glutamine","Glycine","Histidine","Isoleucine","Leucine","Lysine","Methionine","Phenylalanine","Proline","Serine","Threonine","Tryptophan","Tyrosine","Valine"],["Ala","Arg","Asn","Asp","Cys","Glu","Gln","Gly","His","Ile","Leu","Lys","Met","Phe","Pro","Ser","Thr","Trp","Tyr","Val"],[3.55,3.55,3.55,4.55,3.55,4.75,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55,3.55],[7.59,7.5,7.5,7.5,7.5,7.7,7.5,7.5,7.5,7.5,7.5,7.5,7,7.5,8.36,6.93,6.82,7.5,7.5,7.44],[null,12,null,4.05,9,4.45,null,null,5.98,null,null,10,null,null,null,null,null,null,10,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Name<\/th>\n      <th>Abbreviation<\/th>\n      <th>pK1<\/th>\n      <th>pK2<\/th>\n      <th>pKr<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[3,4,5]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Name","targets":1},{"name":"Abbreviation","targets":2},{"name":"pK1","targets":3},{"name":"pK2","targets":4},{"name":"pKr","targets":5}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </figure>
@@ -378,7 +386,7 @@ Table&nbsp;1: Bjellqvist pK<sub>a</sub> values for termini and side chains of al
 </section>
 </section>
 <section id="sec-writing-the-r-function" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="sec-writing-the-r-function"><span class="header-section-number">3</span> Writing the <code>R</code> function</h2>
+<h2 data-number="3" class="anchored" data-anchor-id="sec-writing-the-r-function"><span class="header-section-number">3</span> Creating the <code>R</code> function</h2>
 <p>Using the formulas in <a href="#eq-general_charges" class="quarto-xref">10</a> and the pK<sub>a</sub> information from Bjellqvist, I created the function <code>computeCharge</code> that calculates the net charge of a peptide at a given pH.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>computeCharge <span class="ot">&lt;-</span> <span class="cf">function</span>(Peptide, pH){</span>

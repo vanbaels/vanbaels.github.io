@@ -12,7 +12,7 @@ csl: apa.csl
 bibliography: references.bib
 ---
 
-This post starts with an introduction on how all the formulas for charge calculation were derived. If you want to go directly to writing the function in `R`, that starts in @sec-writing-the-r-function
+This post starts with a quite extensive introduction on how all the formulas for the charge calculations were derived. If you want to see the `R` code directly, go to @sec-writing-the-r-function.
 
 ## Packages used
 
@@ -41,13 +41,25 @@ If the charge of each of the aforementioned groups is known, the charge $Z$ of a
 
 $$
 \begin{align*}
-& Z_{peptide} = Z_{N-term} + Z_{C-term} + n\cdot Z_{Lys} + n\cdot Z_{Arg} + n\cdot Z_{His} + n\cdot Z_{Glu} + n\cdot Z_{Asp} + n\cdot Z_{Cys} + n\cdot Z_{Tyr}
+Z_{peptide} = Z_{N-term} &+ Z_{C-term}
+\\
+& + n\cdot Z_{Lys}
+\\
+& + n\cdot Z_{Arg}
+\\
+& + n\cdot Z_{His}
+\\
+& + n\cdot Z_{Glu}
+\\
+& + n\cdot Z_{Asp}
+\\
+& + n\cdot Z_{Cys}
+\\
+& + n\cdot Z_{Tyr}
 \end{align*}
 $$ {#eq-simple_Z}
 
-Where $n$ is the number of each corresponding amino acid present in the peptide.
-
-The question now is: how to calculate the charge $Z$ for each element in question?
+Where $n$ is the number of each corresponding amino acid present in the peptide. The question now is: how to calculate the charge $Z$ for each element in question?
 
 ### Calculating the fraction of charged/neutral molecules
 
@@ -156,7 +168,7 @@ datatable(df_bjellqvist)
 
 ------------------------------------------------------------------------
 
-## Writing the `R` function {#sec-writing-the-r-function}
+## Creating the `R` function {#sec-writing-the-r-function}
 
 Using the formulas in [-@eq-general_charges] and the pK~a~ information from Bjellqvist, I created the function `computeCharge` that calculates the net charge of a peptide at a given pH.
 
@@ -277,5 +289,4 @@ ggplot(df_pH) +
   theme(axis.text = element_text(size = 16, color = "black"),
         axis.title = element_text(size = 18, face = "bold"),
         plot.title = element_text(hjust = 0.5, size = 18, face = "bold"))
-
 ```
