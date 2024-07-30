@@ -7,7 +7,7 @@ website:
   search: false
   navbar:
     foreground: "#FFFFFF"
-    background: "#29546a"
+    background: "#1a4154"
     left:
       - text: Home
         href: index.qmd
