@@ -6,6 +6,7 @@ website:
   title: "Sven Van Bael"
   search: false
   navbar:
+    foreground: "#FFFFFF"
     background: "#29546a"
     left:
       - text: Home
