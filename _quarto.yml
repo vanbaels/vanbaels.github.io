@@ -9,7 +9,6 @@ website:
     left:
       - text: Home
         href: index.qmd
-      - text: CV
       - text: Personal projects
         href: Personal_projects/personal_projects.qmd
       - text: Academic work

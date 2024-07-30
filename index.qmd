@@ -8,24 +8,27 @@ about:
   image-shape: round
   image-width: 10em
   links:
-    - icon: globe2
-      text: ORCID
+    - text: Mail
+      icon: envelope
+      href: mailto:sven.van.bael@gmail.com
+    - text: CV
+      icon: file-earmark-person
+    - text: Scholar
+      icon: google
+      href: https://scholar.google.be/citations?user=DCHeyesAAAAJ&hl=nl&oi=ao
+    - text: ORCID
+      icon: globe2
       href: https://orcid.org/0000-0002-6948-1020
-    - icon: github
-      text: Github
-      href: https://github.com
 ---
 
 ::: {#svb-summary}
-Experienced researcher with an interest in analytical techniques and data science.
+Hi!
 
-## Experience
+I’m a former (post)doctoral researcher at KU Leuven/University of Antwerp with a strong interest in **data science and data visualization**. During my academic career, I have gained a lot of experience with critically analysing relatively large datasets and applying statistical methods to turn raw data into meaningful conclusions.
 
-**Post-doctoral researcher** \| University of Antwerp <br> *Centre for Proteomics* <br> Nov. 2020 - Oct. 2023
+On this website I have collected some of my work using **R and RStudio**. This ranges from personal projects based on my own interests and curiosity, to some of my academic work, where I used R to answer some of my research questions.
 
-**Post-doctoral researcher** \| KU Leuven <br> *Research group of Molecular and Functional Neurobiology* <br> Jan. 2019 - Oct. 2023
-
-**PhD researcher** \| KU Leuven <br> *Research group of Functional Genomics and Proteomics* <br> Oct. 2014 - Dec. 2018
+**Want to know more about me?** Check the left pane of this page. You can contact me via mail, or explore my CV and list of academic publications.
 :::
 
 ------------------------------------------------------------------------
