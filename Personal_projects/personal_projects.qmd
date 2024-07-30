@@ -1,6 +1,6 @@
 ---
 title: "Personal projects"
-subtitle: "An overview of some data analyses and visualisations projects that I have worked on in my spare time."
+subtitle: "An overview of some data analyses and visualisations that I have worked on in my spare time."
 title-block-banner: "#c7dbe8"
 title-block-banner-color: "black"
 listing:
