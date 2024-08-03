@@ -1,0 +1,55 @@
+---
+title: "Veto Poll"
+author: "Sven Van Bael"
+date: 2024/08/01
+format: 
+  html:
+    number-sections: true
+    df-print: kable
+    toc: true
+editor: visual
+---
+
+## Introduction
+
+In the lead-up to the 2024 federal elections in Belgium, the student newspaper *Veto* conducted a survey among the students and staff of its alma mater, the KU Leuven. On their website, they show the results [university-wide](https://www.veto.be/sociaal/peiling-veto-n-va-is-weer-de-grootste-partij-bij-studenten/342378), and [split up per faculty](https://www.veto.be/sociaal/peiling-veto-bekijk-hier-hoe-jouw-faculteit-stemde/342446). For the university-wide results, the plot provides a break-up of the votes per faculty for each political party. An interesting observation with the university-wide plot is that it states that 137 students from the faculty of Economics and Business have voted for N-VA, while the plot of the faculty shows that there are a total of 50 participants, of which 27 (54%) voted for N-VA (@fig-Uni_vs_FEB).
+
+![Survey results for all students of KU Leuven (A) versus only the students of the faculty of Economy and Business (B). The discrepancy in the number of votes for N-VA is due to a weight correction that has been applied for the university-wide plot.](Uni_vs_FEB.png){#fig-Uni_vs_FEB}
+
+So how did these 27 students in the faculty of Economics got turned into 137 students university-wide? Luckily, the authors of the article have provided a short description of their methods:
+
+> *\[...\] The results from the students were weighted according to the relative size of the participating faculties \[...\]*
+>
+> [Veto](https://www.veto.be/sociaal/peiling-veto-n-va-is-weer-de-grootste-partij-bij-studenten/342378)
+
+This reasoning is sound. Student numbers differ greatly between faculties, and differences in participant numbers might increase the weight of a faculty on the university-wide level. However, this is a process that should be carried out with great care: the number of participants rarely equals the total number of students in a faculty (in most cases it is *much* lower), so in essence you are extrapolating data. Hence, the initial sample size should be a good representation for the faculty as a whole to warrant a fair weight correction.
+
+Let's check this for the earlier mentioned faculty of Economics and Business, where 50 students participated in the survey. Going by the [student numbers per faculty published by KU Leuven](https://www.kuleuven.be/prodstudinfo/v2/50000050/aant_det_en_v2.html), Economy and Business had a total of 10443 students in 2022-2023 (the most recent academic year with complete data). This means that the voting preferences of 50 students - not even 0.5% of the total faculty - has been extrapolated to that of 10443 students! To make matters worse: the faculty of Economics is one of the largest at KU Leuven, representing 16% of the total student body of the university! Hoping that this was just a case of bad luck, and that participant numbers would be higher and more representative elsewhere, I checked one of the other large faculties: Medicine (11103 students). Here, 91 students have participated in the survey, a meager 0.8% of the entire faculty. Combining what we already know for Economics and Medicine, this implicates that the weight correction - which was applied in good faith - already resulted in the voting preferences of 141 students being extrapolated to represent 33% of a university with over 60000 students!
+
+To get a clearer picture, I want to have a look at what the data looks like before this correction was applied. Luckily, *Veto* did a very good job in creating informative plots, making it possible to reverse engineer the raw data from the faculty plots. Knowing the total number of participants and percentages for each political party, I can calculate the absolute number of votes.
+
+## Packages used
+
+```{r}
+library(tidyverse)
+```
+
+## Exploring the data
+
+```{r}
+
+
+df_votes <- read_csv("Veto_survey_votes.csv")
+
+
+
+test <- df_votes %>%
+  group_by(Party) %>%
+  summarize("Total Votes (abs) - weighted" = sum(`Votes (absolute) - weighted`)) %>%
+  ungroup() %>%
+  mutate("Votes (pct) - weighted" = `Total Votes (abs) - weighted`/sum(`Total Votes (abs) - weighted`))
+
+
+ggplot(test) +
+  geom_col(aes(x = fct_reorder(Party, -`Votes (pct) - weighted`), y = `Votes (pct) - weighted`))
+```
