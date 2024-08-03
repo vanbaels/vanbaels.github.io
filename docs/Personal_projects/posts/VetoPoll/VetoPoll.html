@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -102,6 +136,8 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#packages-used" id="toc-packages-used" class="nav-link" data-scroll-target="#packages-used"><span class="header-section-number">2</span> Packages used</a></li>
+  <li><a href="#exploring-the-data" id="toc-exploring-the-data" class="nav-link" data-scroll-target="#exploring-the-data"><span class="header-section-number">3</span> Exploring the data</a></li>
   </ul>
 </nav>
     </div>
@@ -154,12 +190,62 @@ Figure&nbsp;1: Survey results for all students of KU Leuven (A) versus only the 
 </div>
 <p>So how did these 27 students in the faculty of Economics got turned into 137 students university-wide? Luckily, the authors of the article have provided a short description of their methods:</p>
 <blockquote class="blockquote">
-<p><em>The results from the students were weighted according to the relative size of the participating faculties […]</em></p>
+<p><em>[…] The results from the students were weighted according to the relative size of the participating faculties […]</em></p>
 <p><a href="https://www.veto.be/sociaal/peiling-veto-n-va-is-weer-de-grootste-partij-bij-studenten/342378">Veto</a></p>
 </blockquote>
 <p>This reasoning is sound. Student numbers differ greatly between faculties, and differences in participant numbers might increase the weight of a faculty on the university-wide level. However, this is a process that should be carried out with great care: the number of participants rarely equals the total number of students in a faculty (in most cases it is <em>much</em> lower), so in essence you are extrapolating data. Hence, the initial sample size should be a good representation for the faculty as a whole to warrant a fair weight correction.</p>
 <p>Let’s check this for the earlier mentioned faculty of Economics and Business, where 50 students participated in the survey. Going by the <a href="https://www.kuleuven.be/prodstudinfo/v2/50000050/aant_det_en_v2.html">student numbers per faculty published by KU Leuven</a>, Economy and Business had a total of 10443 students in 2022-2023 (the most recent academic year with complete data). This means that the voting preferences of 50 students - not even 0.5% of the total faculty - has been extrapolated to that of 10443 students! To make matters worse: the faculty of Economics is one of the largest at KU Leuven, representing 16% of the total student body of the university! Hoping that this was just a case of bad luck, and that participant numbers would be higher and more representative elsewhere, I checked one of the other large faculties: Medicine (11103 students). Here, 91 students have participated in the survey, a meager 0.8% of the entire faculty. Combining what we already know for Economics and Medicine, this implicates that the weight correction - which was applied in good faith - already resulted in the voting preferences of 141 students being extrapolated to represent 33% of a university with over 60000 students!</p>
-<p>To get a clearer picture, I want to have a look at what the data looks like before this correction was applied. Luckily, <em>Veto</em> did a very good job in creating informative plots that make it possible to reverse engineer the raw data from the faculty plots. Knowing the total number of participants and percentages for each political party, I can calculate the absolute number of votes.</p>
+<p>To get a clearer picture, I want to have a look at what the data looks like before this correction was applied. Luckily, <em>Veto</em> did a very good job in creating informative plots, making it possible to reverse engineer the raw data from the faculty plots. Knowing the total number of participants and percentages for each political party, I can calculate the absolute number of votes.</p>
+</section>
+<section id="packages-used" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="packages-used"><span class="header-section-number">2</span> Packages used</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.1     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+</section>
+<section id="exploring-the-data" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="exploring-the-data"><span class="header-section-number">3</span> Exploring the data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_votes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Veto_survey_votes.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 127 Columns: 6
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (3): Faculty, Abbreviation, Party
+dbl (3): Participants, Votes (absolute), Votes (absolute) - weighted
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> df_votes <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Party) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"Total Votes (abs) - weighted"</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Votes (absolute) - weighted</span><span class="st">`</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"Votes (pct) - weighted"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Total Votes (abs) - weighted</span><span class="st">`</span><span class="sc">/</span><span class="fu">sum</span>(<span class="st">`</span><span class="at">Total Votes (abs) - weighted</span><span class="st">`</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(test) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">fct_reorder</span>(Party, <span class="sc">-</span><span class="st">`</span><span class="at">Votes (pct) - weighted</span><span class="st">`</span>), <span class="at">y =</span> <span class="st">`</span><span class="at">Votes (pct) - weighted</span><span class="st">`</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="VetoPoll_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>
