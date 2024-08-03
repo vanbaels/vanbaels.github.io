@@ -12,7 +12,7 @@ csl: apa.csl
 bibliography: references.bib
 ---
 
-This post starts with a quite extensive introduction on how all the formulas for the charge calculations were derived. If you want to see the `R` code directly, go to @sec-writing-the-r-function.
+This post describes a workflow for calculating the charge of a peptide from its amino acid composition. I start first with a quite extensive introduction on the origin of the formulas that are used. If you want to see the `R` code directly, go to @sec-writing-the-r-function.
 
 ## Packages used
 

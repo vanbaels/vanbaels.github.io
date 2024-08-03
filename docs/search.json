@@ -67,7 +67,7 @@
     "href": "Academic_work/posts/PepNetCharge/PepNetCharge.html",
     "title": "Calculating the net charge of a peptide",
     "section": "",
-    "text": "This post starts with a quite extensive introduction on how all the formulas for the charge calculations were derived. If you want to see the R code directly, go to Section 3."
+    "text": "This post describes a workflow for calculating the charge of a peptide from its amino acid composition. I start first with a quite extensive introduction on the origin of the formulas that are used. If you want to see the R code directly, go to Section 3."
   },
   {
     "objectID": "Academic_work/posts/PepNetCharge/PepNetCharge.html#packages-used",
