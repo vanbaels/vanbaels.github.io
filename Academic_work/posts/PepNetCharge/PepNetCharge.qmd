@@ -219,7 +219,7 @@ Let's test the function using the peptide sequence DGLDAASYYAPVR, which is part 
 computeCharge("DGLDAASYYAPVR", 2.7)
 ```
 
-The value of `r computeCharge("DGLDAASYYAPVR", 2.7) %>% round(., 2)` can be interpreted that there both are molecules with charge +1 and charge +2 present, but since the calculated charge is closer to +2, the vast majority will be doubly charged. If necessary, the ratio $f$ of doubly charged molecules can be calculated as follows:
+The value of `r computeCharge("DGLDAASYYAPVR", 2.7) %>% round(., 2)` can be interpreted that there both are molecules with charge +1 and charge +2 present, but since the calculated charge is closer to +2, the vast majority will be doubly charged. If necessary, the fraction $f$ of doubly charged molecules can be calculated as follows:
 
 $$
 \begin{align*}
