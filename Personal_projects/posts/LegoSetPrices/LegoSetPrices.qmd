@@ -2,6 +2,7 @@
 title: "A closer look at Lego set prices"
 author: "Sven Van Bael"
 date: 2024/07/21
+description-meta: "Lego is a personal interest of mine, and I wanted to have a closer look at how the sets evolved over the years."
 format: 
   html:
     number-sections: true

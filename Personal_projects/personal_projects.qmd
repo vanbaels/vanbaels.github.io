@@ -7,4 +7,5 @@ listing:
   type: default
   contents: posts
   max-description-length: 100
+  sort: "date desc"
 ---

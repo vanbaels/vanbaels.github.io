@@ -26,7 +26,7 @@ Hi!
 
 I’m a former (post)doctoral researcher at KU Leuven/University of Antwerp with a strong interest in **data science and data visualization**. During my academic career, I have gained a lot of experience with critically analyzing large data sets and applying statistical methods to turn raw data into meaningful conclusions.
 
-On this website I have collected some of my work with **R and RStudio**. This ranges from [personal projects](Personal_projects/personal_projects.qmd) based on my own interests and curiosity, to some of my [academic work](Academic_work/academic_work.qmd), where I used R to answer some of my research questions.
+On this website I have collected some of my work with **R, RStudio and Quarto**. This ranges from [personal projects](Personal_projects/personal_projects.qmd) based on my own interests and curiosity, to some of my [academic work](Academic_work/academic_work.qmd), where I used R to answer some of my research questions.
 
 **Want to know more about me?** Check the left pane of this page. You can contact me via mail, or explore my CV and list of academic publications.
 :::
