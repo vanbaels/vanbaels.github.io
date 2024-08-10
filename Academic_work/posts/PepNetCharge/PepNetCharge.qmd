@@ -8,7 +8,7 @@ format:
     df-print: kable
     toc: true
 editor: visual
-csl: apa.csl
+csl: apa7.csl
 bibliography: references.bib
 ---
 

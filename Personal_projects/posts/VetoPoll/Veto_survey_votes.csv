@@ -1,0 +1,128 @@
+﻿Faculty,Abbreviation,Participants - absolute,Party,Votes - absolute,Votes - weighted
+Faculty of Theology and Religious Studies,FTRW,9,CD&V,6,14
+Faculty of Theology and Religious Studies,FTRW,9,Groen,1,2
+Faculty of Theology and Religious Studies,FTRW,9,N-VA,1,2
+Faculty of Theology and Religious Studies,FTRW,9,PVDA,1,2
+Faculty of Canon Law,BFKR,3,Vlaams Belang,2,3
+Faculty of Canon Law,BFKR,3,N-VA,1,2
+Institute of Philosophy,HIW,20,PVDA,5,9
+Institute of Philosophy,HIW,20,Groen,4,7
+Institute of Philosophy,HIW,20,Vooruit,4,7
+Institute of Philosophy,HIW,20,Vlaams Belang,3,5
+Institute of Philosophy,HIW,20,CD&V,1,2
+Institute of Philosophy,HIW,20,I vote blank,1,2
+Institute of Philosophy,HIW,20,N-VA,1,2
+Institute of Philosophy,HIW,20,Open VLD,1,2
+Faculty of Law and Criminology,FRC,375,N-VA,87,37
+Faculty of Law and Criminology,FRC,375,Open VLD,71,30
+Faculty of Law and Criminology,FRC,375,Groen,55,23
+Faculty of Law and Criminology,FRC,375,Vooruit,55,23
+Faculty of Law and Criminology,FRC,375,CD&V,50,21
+Faculty of Law and Criminology,FRC,375,Vlaams Belang,30,13
+Faculty of Law and Criminology,FRC,375,PVDA,18,8
+Faculty of Law and Criminology,FRC,375,I'm not going to vote,4,2
+Faculty of Law and Criminology,FRC,375,I vote blank,2,1
+Faculty of Law and Criminology,FRC,375,Voor U,2,1
+Faculty of Law and Criminology,FRC,375,L'Unie,1,0
+Faculty of Economics and Business,FEB,50,N-VA,27,137
+Faculty of Economics and Business,FEB,50,Vlaams Belang,8,40
+Faculty of Economics and Business,FEB,50,Groen,4,20
+Faculty of Economics and Business,FEB,50,Open VLD,4,20
+Faculty of Economics and Business,FEB,50,Vooruit,3,15
+Faculty of Economics and Business,FEB,50,CD&V,2,10
+Faculty of Economics and Business,FEB,50,PVDA,1,5
+Faculty of Economics and Business,FEB,50,Voor U,1,5
+Faculty of Social Sciences,FSW,107,Vooruit,28,29
+Faculty of Social Sciences,FSW,107,Groen,19,20
+Faculty of Social Sciences,FSW,107,N-VA,13,14
+Faculty of Social Sciences,FSW,107,PVDA,13,14
+Faculty of Social Sciences,FSW,107,CD&V,12,12
+Faculty of Social Sciences,FSW,107,Open VLD,10,10
+Faculty of Social Sciences,FSW,107,Vlaams Belang,7,7
+Faculty of Social Sciences,FSW,107,I vote blank,2,2
+Faculty of Social Sciences,FSW,107,L'Unie,2,2
+Faculty of Social Sciences,FSW,107,I'm not going to vote,1,1
+Faculty of Arts,LETT,399,Groen,109,33
+Faculty of Arts,LETT,399,Vooruit,73,22
+Faculty of Arts,LETT,399,PVDA,63,19
+Faculty of Arts,LETT,399,N-VA,50,15
+Faculty of Arts,LETT,399,CD&V,41,12
+Faculty of Arts,LETT,399,Open VLD,25,8
+Faculty of Arts,LETT,399,Vlaams Belang,17,5
+Faculty of Arts,LETT,399,L'Unie,10,3
+Faculty of Arts,LETT,399,Partij Blanco,6,2
+Faculty of Arts,LETT,399,I vote blank,2,1
+Faculty of Arts,LETT,399,I'm not going to vote,2,1
+Faculty of Arts,LETT,399,Voor U,1,0
+Faculty of Psychology and Educational Sciences,PPW,51,Groen,15,32
+Faculty of Psychology and Educational Sciences,PPW,51,Vooruit,10,21
+Faculty of Psychology and Educational Sciences,PPW,51,PVDA,9,19
+Faculty of Psychology and Educational Sciences,PPW,51,N-VA,6,13
+Faculty of Psychology and Educational Sciences,PPW,51,CD&V,5,11
+Faculty of Psychology and Educational Sciences,PPW,51,Open VLD,4,8
+Faculty of Psychology and Educational Sciences,PPW,51,Vlaams Belang,1,2
+Faculty of Psychology and Educational Sciences,PPW,51,Voor U,1,2
+Faculty of Science,FWET,347,Groen,81,31
+Faculty of Science,FWET,347,Vooruit,81,31
+Faculty of Science,FWET,347,N-VA,60,23
+Faculty of Science,FWET,347,CD&V,35,13
+Faculty of Science,FWET,347,Open VLD,28,11
+Faculty of Science,FWET,347,PVDA,28,11
+Faculty of Science,FWET,347,Vlaams Belang,22,8
+Faculty of Science,FWET,347,I vote blank,3,1
+Faculty of Science,FWET,347,L'Unie,3,1
+Faculty of Science,FWET,347,I'm not going to vote,3,1
+Faculty of Science,FWET,347,Voor U,3,1
+Faculty of Engineering Science,FirW,232,N-VA,84,61
+Faculty of Engineering Science,FirW,232,Vooruit,33,24
+Faculty of Engineering Science,FirW,232,Open VLD,31,23
+Faculty of Engineering Science,FirW,232,CD&V,25,18
+Faculty of Engineering Science,FirW,232,Groen,18,13
+Faculty of Engineering Science,FirW,232,Vlaams Belang,18,13
+Faculty of Engineering Science,FirW,232,PVDA,9,7
+Faculty of Engineering Science,FirW,232,I'm not going to vote,4,3
+Faculty of Engineering Science,FirW,232,Voor U,4,3
+Faculty of Engineering Science,FirW,232,I vote blank,3,2
+Faculty of Engineering Science,FirW,232,Partij Blanco,3,2
+Faculty of Bioscience Engineering,FBIW,43,Groen,16,30
+Faculty of Bioscience Engineering,FBIW,43,Vooruit,10,19
+Faculty of Bioscience Engineering,FBIW,43,N-VA,8,15
+Faculty of Bioscience Engineering,FBIW,43,CD&V,4,8
+Faculty of Bioscience Engineering,FBIW,43,Open VLD,3,6
+Faculty of Bioscience Engineering,FBIW,43,PVDA,1,2
+Faculty of Bioscience Engineering,FBIW,43,Partij Blanco,1,2
+Faculty of Engineering Technology,FIIW,23,Vlaams Belang,6,33
+Faculty of Engineering Technology,FIIW,23,N-VA,5,27
+Faculty of Engineering Technology,FIIW,23,Open VLD,5,27
+Faculty of Engineering Technology,FIIW,23,Vooruit,3,16
+Faculty of Engineering Technology,FIIW,23,CD&V,2,11
+Faculty of Engineering Technology,FIIW,23,Groen,1,5
+Faculty of Engineering Technology,FIIW,23,PVDA,1,5
+Faculty of Architecture,FA,8,Vooruit,3,20
+Faculty of Architecture,FA,8,N-VA,2,14
+Faculty of Architecture,FA,8,Groen,1,7
+Faculty of Architecture,FA,8,Open VLD,1,7
+Faculty of Architecture,FA,8,PVDA,1,7
+Faculty of Medicine,GEN,91,N-VA,19,52
+Faculty of Medicine,GEN,91,Groen,18,50
+Faculty of Medicine,GEN,91,Vooruit,18,50
+Faculty of Medicine,GEN,91,PVDA,15,41
+Faculty of Medicine,GEN,91,Open VLD,8,22
+Faculty of Medicine,GEN,91,CD&V,5,14
+Faculty of Medicine,GEN,91,Vlaams Belang,3,8
+Faculty of Medicine,GEN,91,I'm not going to vote,2,6
+Faculty of Medicine,GEN,91,Voor U,2,6
+Faculty of Medicine,GEN,91,L'Unie,1,3
+Faculty of Pharmaceutical Sciences,FFW,8,Open VLD,3,11
+Faculty of Pharmaceutical Sciences,FFW,8,CD&V,1,4
+Faculty of Pharmaceutical Sciences,FFW,8,N-VA,1,4
+Faculty of Pharmaceutical Sciences,FFW,8,PVDA,1,4
+Faculty of Pharmaceutical Sciences,FFW,8,Vlaams Belang,1,4
+Faculty of Pharmaceutical Sciences,FFW,8,Vooruit,1,4
+Faculty of Movement and Rehabilitation Sciences,FaBeR,35,N-VA,9,20
+Faculty of Movement and Rehabilitation Sciences,FaBeR,35,Groen,8,18
+Faculty of Movement and Rehabilitation Sciences,FaBeR,35,CD&V,5,11
+Faculty of Movement and Rehabilitation Sciences,FaBeR,35,Open VLD,5,11
+Faculty of Movement and Rehabilitation Sciences,FaBeR,35,Vooruit,4,9
+Faculty of Movement and Rehabilitation Sciences,FaBeR,35,Vlaams Belang,3,7
+Faculty of Movement and Rehabilitation Sciences,FaBeR,35,Voor U,1,2
