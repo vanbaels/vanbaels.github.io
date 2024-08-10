@@ -309,7 +309,7 @@ As a consequence, the university-wide plot with weight correction - as made by *
 
 ## Conclusions
 
-The data acquired by the *Veto* survey in itself could have been very informative, if processed correctly. The writers of the article know very well that a survey with low number of participants yields data that cannot be completely trusted. They even warn for it in their own article, where faculty plots with low participant numbers are accompanied by the statement "*The response for this faculty is very low, so take the results with a grain of salt.*" So why bother correcting data of which you know it isn't reliable in the first place? It reminded me of an anecdote recited by Charles Babbage, inventor of the first (mechanical) computing engines:
+The data acquired by the *Veto* survey in itself could have been very informative, if processed correctly. The writers of the article know very well that a survey with low number of participants yields data that cannot be completely trusted. They even warn for it in their own article, where faculty plots with low participant numbers are accompanied by the statement "*The response for this faculty is very low, so take the results with a grain of salt.*" So why bother correcting data of which you know it isn't reliable in the first place? This is reminiscent of an anecdote recited by Charles Babbage, inventor of the first (mechanical) computing engines:
 
 > *On two occasions I have been asked, "Pray, Mr. Babbage, if you put into the machine wrong figures, will the right answers come out?" ... I am not able rightly to apprehend the kind of confusion of ideas that could provoke such a question.*
 >
