@@ -112,7 +112,7 @@ The real question is: why is there even a difference between the absolute and we
 
 ### Non-weighted votes show a less prominent difference between the top-two parties
 
-Having all the data, let's recreate the university-wide plot with the non-corrected data. This can provide an insight the overall impact of the weight correction.
+Having all the data, let's recreate the university-wide plot with the non-corrected data. This can provide an insight into the overall impact of the weight correction.
 
 One remarkable element in the original plot with weight correction is the big difference between the two largest parties: *N-VA* scored 25.2%, while *Groen* came second with 16.8%, a difference of 8.4 percentage points! When looking at the raw voting results (@fig-uni_wide), this massive difference has melted away. *N-VA* still remains the largest party, but *Groen* and *Vooruit* follow closely, with a 1.4 and 2.7 percentage point difference respectively.
 
@@ -242,7 +242,7 @@ $$
 \text{Margin of error} = z\cdot\sqrt{\frac{p(1-p)}{N}}
 $$
 
-Where $z$ is the z-score for a certain confidence level (1.96 is mostly used, and corresponds with a 95% confidence), $p$ is the proportion of the result (i.e. the score of a party), and $N$ the number of participants. Most surveys in (trustworthy) newspapers and websites will use a margin of error of \~3% at 95% confidence. This means that 95% of the time, the reported result of a party will lie within an interval of ±3 percentage points. As an example: a score of 20 ± 3% for *Vooruit* conveys that when you repeat the same survey 100 times, 95% of the obtained results will be between 17% and 23% for *Vooruit*. Hence, the smaller the margin of error, the more trustworthy the results.
+Where $z$ is the z-score for a certain confidence level (1.96 is mostly used, and corresponds with a 95% confidence), $p$ is the proportion of the result (i.e. the score of a party), and $N$ the number of participants. Most surveys in (trustworthy) newspapers and websites will use a margin of error of \~3% at 95% confidence. This means that 95% of the time, the reported result of a party will lie within an interval of ±3 percentage points. As an example: a score of 20 ± 3% for *Vooruit* conveys that when you repeat the same survey 100 times, 95 times the obtained results will lie between 17% and 23% for *Vooruit*. Hence, the smaller the margin of error, the more trustworthy the results.
 
 For the *Veto* poll, I calculated the margin of error for the largest party per faculty (since $p$ depends on the party score, the error will be larger for large parties and vice versa). Percentage scores were calculated using the non-corrected votes. The results can be found in @tbl-error_margin.
 
