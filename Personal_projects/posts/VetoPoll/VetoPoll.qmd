@@ -315,7 +315,7 @@ The data acquired by the *Veto* survey in itself could have been very informativ
 >
 > **Charles Babbage**
 
-Or more simply stated: garbage in, garbage out. Correcting low-quality data does not suddenly allow you to make statistically sound claims. Paradoxically, not correcting the data and presenting it as the voting preferences of 1801 people who happen to study at KU Leuven would have probably been the better approach.
+Or more crudely stated: garbage in, garbage out. Correcting low-quality data does not suddenly allow you to make statistically sound claims. Paradoxically, not correcting the data and presenting it as the voting preferences of 1801 people who happen to study at KU Leuven would have probably been the better approach.
 
 As mentioned earlier, this survey was widely discussed in the media and politicized in the lead-up to the 2024 federal elections. Several newspapers reported on its conclusions, and [*De Standaard*](https://www.standaard.be/cnt/dmf20240527_97355026) [@DeSmet.2024] called upon the help of KU Leuven statistics professor Geert Molenberghs, who likewise stated that the number of participants is too low and differs too much between faculties to draw any sound conclusions. In a reaction to this, the editor-in-chief of *Veto* responded:
 
@@ -323,6 +323,6 @@ As mentioned earlier, this survey was widely discussed in the media and politici
 >
 > [**Editor-in-chief, Veto**](https://www.standaard.be/cnt/dmf20240527_97355026)
 
-As someone with experience in setting up scientific experiments and performing the necessary diligence to make them statistically sound, this statement irks me to no end. If the results confirm what you already expected, why then even bother doing a survey in the first place? This is a beautiful example of confirmation bias: the data fits my expectations, so it must be correct. With no statistical tests to confirm or deny it, the "trend" of which he speaks cannot be discerned from random noise. If the number of points is low enough, you will always be able to fit a line through them, one way or another.
+As someone with some experience in setting up scientific experiments and performing the necessary diligence to make them statistically sound, this statement irks me to no end. If the results confirm what you already expected, then why even bother doing a survey in the first place? This is a beautiful example of confirmation bias: the data fits my expectations, so it must be correct. With no sufficient data to confirm or deny it, the "trend" of which the editor-in-chief speaks cannot be discerned from random noise. If the number of points is low enough, you will always be able to fit a line through them, one way or another.
 
 All in all, the effort was good, and the authors did think about the right ways to correct for faculty weight, but it is a shame they applied it on data that is severely lacking in statistical power.
