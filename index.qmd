@@ -30,6 +30,8 @@ I’m a former (post)doctoral researcher at KU Leuven/University of Antwerp wit
 On this website I have collected some of my work with **R, RStudio and Quarto**. This ranges from [personal projects](Personal_projects/personal_projects.qmd) based on my own interests and curiosity, to some of my [academic work](Academic_work/academic_work.qmd), where I used R to answer some of my research questions.
 
 **Want to know more about me?** You can contact me via mail, or explore my CV and list of academic publications on this page.
+
+**Latest update:** [Testing MS2PIP, a tool for peptide spectral library prediction, with *C. elegans* neuropeptides](Academic_work\posts\Testing_MS2PIP\Testing_MS2PIP.qmd)
 :::
 
 ------------------------------------------------------------------------

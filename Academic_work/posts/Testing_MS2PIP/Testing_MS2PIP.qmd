@@ -1,0 +1,224 @@
+---
+title: "Testing MS2PIP, a tool for peptide spectral library prediction, with _C. elegans_ neuropeptides"
+author: "Sven Van Bael"
+date: 2024/10/07
+format: 
+  html:
+    number-sections: true
+    df-print: kable
+    toc: true
+editor: visual
+csl: apa7.csl
+bibliography: references.bib
+---
+
+## Introduction
+
+In mass spectrometry-based proteomics and peptidomics, peptide identification for targeted (quantitative) techniques, such as parallel reaction monitoring (PRM) and data-independent acquisition (DIA), rely on matching the obtained fragmentation patterns with a reference fragmentation pattern of the peptide(s) of interest. Although the individual masses of the (b and y) fragment ions can be easily calculated, their (relative) intensities are far more challenging to accurately predict, as they are influenced by amino acid composition, location within the peptide, and overall charge state. Hence, most PRM or DIA techniques will employ empirically collected LC-MS/MS fragmentation data of the peptides of interest, commonly referred to as a "spectral library". A major downside here is that you are depending on the peptide being observed in previously acquired LC-MS/MS runs, be it from running biological reference samples, or from synthetic versions of your peptide(s) of interest.
+
+Generating a peptide library is therefore no trivial task, often requiring multiple LC-MS/MS runs, filtering and selection of high-quality ions. Over the years, several research groups undertook the challenge to train deep learning models (trained on real-life proteomics data) that would be able to generate such libraries from scratch, only requiring the peptide sequence and charge (which can also be predicted fairly accurately). The two most promising models are MS2PIP from the CompOmics group in Gent [@gabriels2019], and PROSIT from the Proteomics Bioinformatics group in Munich [@gessulat2019].
+
+During my PhD and postdoc, I've been working on the identification of neuropeptides in the model organism *C. elegans*, and the development of targeted LC-MS/MS approaches for their relative quantification. Although they are both called "peptides", neuropeptides and the typical tryptic peptides targeted in proteomics methods differ enough to necessitate tailored LC-MS-MS approaches. For one, neuropeptides are typically shorter in length, and do not have the signature C-terminal basic residue as is seen in tryptic peptides (peptidomics workflows do not include a digestion step, since the peptides are already produced within the organism). Hence, models that are trained on tryptic peptides for the prediction of fragmentation spectra produce disappointing results when you feed them neuropeptide sequences. Another problem are the post-translational modifications that are observed on neuropeptides, of which C-terminal amidation and N-terminal pyroglutamation are the most common in neuropeptides. Models trained on tryptic peptides do not factor in these modifications, as they are not common in proteomics. On the other hand, PROSIT **always** assumes that the peptides have a carbamidomethyl modification on cysteine, as proteomics (but not peptidomics!) sample preparation incorporates a cysteine alkylation step to block Cys-Cys bond formation.
+
+Here, I have tested how two MS2PIP models (immunoHCD and HCDch2) and compared them to my own empirically collected neuropeptide spectral library. The choice for MS2PIP was made based on the fact that (1) they have a model trained on non-tryptic peptides (immunoHCD), (2) that they allow user-specified post-translational modifications, and (3) unlike PROSIT, MS2PIP does not have the built-in assumption that all peptides have carbamidomethylated cysteines, unless specified otherwise.
+
+## *C. elegans* neuropeptide spectral library prediction with MS2PIP
+
+*While I provided major contributions in the generation of all the data that is described here, it is in its current (unpublished) form not solely mine to share, and is still property of the [Temmerman lab](https://bio.kuleuven.be/df/lt). Hence, all references to neuropeptide IDs and specifics regarding the ions targeted have been removed from the datasets.*
+
+*This analysis was originally performed medio 2023. Any specifics regarding MS2PIP, the available models, and user interface might have changed over time.*
+
+[MS2PIP](https://iomics.ugent.be/ms2pip/) offers a variety of models for spectral library prediction (@fig-MS2PIP_models). Only one model, immunoHCD, is trained on (non-tryptic) immunopeptides and is the model of interest to be tested here. As a reference, I included HCDch2 included, which is trained on peptides originating from tryptic digests. The expectation being that immunoHCD should outperform HCDch2, since immunopeptides are probably more similar to neuropeptides.
+
+![Overview of all models available in MS2PIP. Highlighted are the models that are compatible with my data: trained on data collected with HCD fragmentation and without labelling. A choice was made for the immunoHCD model (because it is trained on non-tryptic immunopeptides) and HCDch2 (which is trained on tryptic peptides) as a reference for comparison.](MS2PIP_models.jpg){#fig-MS2PIP_models}
+
+As specified in the MS2PIP "How To", a `PEPREC` input file containing peptide IDs, peptide sequences, modifications, and charge was created, containing the ions of 300 individual neuropeptides (the same amount as in my empirically collected spectral library). User-defined post-translational modifications and their mass shifts are specified in the `config` file, and consist of:
+
+-   Oxidation (Methionine): +15.994915;
+-   Amidation (C-terminus): -0984016;
+-   Pyroglutamation (Glutamine): -17.026549;
+-   Pyroglutamation (Glutamic acid): -18.010565;
+-   Half of disulfide bridge (Cysteine): -1.007825;
+
+All spectral libraries (my own empirical one, and the MS2PIP generated immunoHCD and HCDch2) are individually used in a [Skyline](https://skyline.ms/project/home/software/skyline/begin.view) workflow for the analysis of a high-quality PRM dataset. This PRM data was recorded on a sample pool of synthetic *C. elegans* neuropeptides, and has been analyzed in great detail before, so I know that the spectra of all 300 neuropeptides are present in this dataset and can be detected and quantified when using my own empirical spectral library.
+
+## Results
+
+### Packages used
+
+```{r}
+#| warning: false
+
+library(tidyverse)
+library(ggpubr)
+library(ggbeeswarm)
+```
+
+### Peak picking correction
+
+During the analysis , Skyline's peak picking algorithm goes through the PRM data, and based on similarities with what is in the spectral library, will automatically add integration borders for MS1 and MS2 peaks. These integration borders are prone to shift a bit between Skyline analyses, especially when using different libraries. So for a fair comparison, I made sure that (approximately) the same region of integration is selected between the three different spectral libraries. In @fig-peak_pick_noncorr, I plotted the MS1 area under the curve of individual ions when using the empirical database versus those when using immunoHCD and HCDch2 libraries. Immediately, you can see that some ions have vastly different AUC values depending on when the empirical or the immunoHCD/HCDch2 was used. Since I'm using my empirical library as a control, I will manually correct the integration borders in the immunoHCD and HCDch2 analyses to correspond with those where the empirical spectral library was used.
+
+```{r}
+#| warning: false
+#| code-fold: true
+#| code-summary: "Show code"
+#| fig-asp: 0.5
+#| fig-width: 8.2
+#| label: fig-peak_pick_noncorr
+#| fig-cap: "MS1 areas under the curve of individual identified neuropeptide ions in the _C. elegans_ neuropeptide PRM dataset, all peak-picked automatically by the Skyline algorithm. **(A)** shows AUCs from the PRM data analyzed with the empirical versus immunoHCD spectral library, and **(B)** shows the Empirical versus HCDch2 spectral library. Both axes are on a log~10~ scale. Red dots are ions where the ratio of the two AUCs $(\\frac{AUC_{Empirical}}{AUC_{MS2PIP}})$ is lower than 0.95 or higher than 1.3."
+
+#Reading in the csv file containing the different AUCs of individual peptides, analyzed with the three different spectral library.
+df_noncorr <- read_csv("Empirical-immunoHCD-HCDch2.csv")
+
+#Plot AUCs of data analyzed with the empirical versus immunoHCD library.
+Emp_immuno <- ggplot(df_noncorr) +
+  geom_point(aes(x = `Total Area MS1_Empirical`,
+                 y = `Total Area MS1_immunoHCD`,
+                 color = (`Total Area MS1_Empirical`/`Total Area MS1_immunoHCD`) < 0.95 | (`Total Area MS1_Empirical`/`Total Area MS1_immunoHCD`) > 1.3,
+                 fill = (`Total Area MS1_Empirical`/`Total Area MS1_immunoHCD`) < 0.95 | (`Total Area MS1_Empirical`/`Total Area MS1_immunoHCD`) > 1.3), pch = 21, size = 3, show.legend = F) +
+  scale_x_continuous(name = "Empirical", trans = "log10") +
+  scale_y_continuous(name = "immunoHCD", trans = "log10") +
+  scale_color_manual(values = c("#000000", "#A50F15")) +
+  scale_fill_manual(values = c("#0000004D", "#A50F154D")) +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16, color = "black"))
+
+#Plot AUCs of data analyzed with the empirical versus HCDch2 library.
+Emp_HCDch2 <- ggplot(df_noncorr) +
+  geom_point(aes(x = `Total Area MS1_Empirical`,
+                 y = `Total Area MS1_HCDch2`,
+                 color = (`Total Area MS1_Empirical`/`Total Area MS1_HCDch2`) < 0.95 | (`Total Area MS1_Empirical`/`Total Area MS1_HCDch2`) > 1.3,
+                 fill = (`Total Area MS1_Empirical`/`Total Area MS1_HCDch2`) < 0.95 | (`Total Area MS1_Empirical`/`Total Area MS1_HCDch2`) > 1.3), pch = 21, size = 3, show.legend = F) +
+  scale_x_continuous(name = "Empirical", trans = "log10") +
+  scale_y_continuous(name = "HCDch2", trans = "log10") +
+  scale_color_manual(values = c("#000000", "#A50F15")) +
+  scale_fill_manual(values = c("#0000004D", "#A50F154D")) +
+  theme_classic() +
+    theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16, color = "black"))
+
+#Arrange plots.
+ggarrange(Emp_immuno, Emp_HCDch2, ncol = 2, nrow = 1, labels = c("A", "B"), font.label = list(size = 20))
+```
+
+Based on what is shown in @fig-peak_pick_noncorr, the integration windows of 15 ions were manually corrected in the analysis with the immunoHCD library, and 32 ions in the analysis with the HCDch2 library. Based on this, it already looks that the HCDch2 does not perform very well, as peak picking seems to fail more often. When making the same plots as in @fig-peak_pick_noncorr after manual correction, it is clear that the integration windows between the three analyses are similar enough to make a fair comparison possible (@fig-peak_pick_corr).
+
+```{r}
+#| warning: false
+#| code-fold: true
+#| code-summary: "Show code"
+#| fig-asp: 0.5
+#| fig-width: 8.2
+#| label: fig-peak_pick_corr
+#| fig-cap: "MS1 areas under the curve of individual identified neuropeptide ions in the _C. elegans_ neuropeptide PRM dataset, manually corrected after automatic peak picking by the Skyline algorithm. **(A)** shows AUCs from the PRM data analyzed with the empirical versus immunoHCD spectral library, and **(B)** shows the Empirical versus HCDch2 spectral library. Both axes are on a log~10~ scale."
+
+
+
+#Reading in the csv file containing the different AUCs of individual peptides, analyzed with the three different spectral library - MS1 integration windows corrected.
+df_corr <- read_csv("Empirical-immunoHCD-HCDch2_MS1_corrected.csv")
+
+#Plot AUCs of data analyzed with the empirical versus immunoHCD library.
+Emp_immuno_corr <- ggplot(df_corr) +
+  geom_point(aes(x = `Total Area MS1_Empirical`,
+                 y = `Total Area MS1_immunoHCD`),
+             pch = 21, fill = "#0000004D", size = 3, show.legend = F) +
+  scale_x_continuous(name = "Empirical", trans = "log10") +
+  scale_y_continuous(name = "immunoHCD", trans = "log10") +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16, color = "black"))
+
+#Plot AUCs of data analyzed with the empirical versus HCDch2 library.
+Emp_HCDch2_corr <- ggplot(df_corr) +
+  geom_point(aes(x = `Total Area MS1_Empirical`,
+                 y = `Total Area MS1_HCDch2`),
+             pch = 21, fill = "#0000004D", size = 3, show.legend = F) +
+  scale_x_continuous(name = "Empirical", trans = "log10") +
+  scale_y_continuous(name = "HCDch2", trans = "log10") +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16, color = "black"))
+
+#Arrange plots.
+ggarrange(Emp_immuno_corr, Emp_HCDch2_corr, ncol = 2, nrow = 1, labels = c("A", "B"), font.label = list(size = 20))
+```
+
+### Comparing the ions' dotp values for the different libraries
+
+For each identified ion, Skyline provides a metric that expresses how well the identified fragmentation peaks in your data correspond to the reference spectrum that is present in the spectral library. This metric, [the dotp (or normalized contrast angle)](https://skyline.ms/announcements/home/support/thread.view?rowid=20003), ranges from 0 (no similarity at al) to 1 (perfect similarity, observed spectrum and library spectrum are identical). Since my PRM dataset are pure synthetic neuropeptides, I know that these fragmentation patterns will be of high quality already, and each one will correspond to a neuropeptide ion (as these are the only things present in the sample, no background). Hence, I can use the dotp as an indicator of the library quality (which is actually the exact opposite of what the metric is normally used for, and only possible because my PRM data contains purely my peptides of interest).
+
+Hypothetically, when the data is analyzed with a high-quality spectral library, the bulk of the dotp values will be high, almost 1. On the other hand, when the spectral library is of low quality, or the library fragment ions do not correspond with what is in the PRM dataset, the dotp values will drop. In @fig-dotp, it is obvious that the dotp values of both predicted spectral libraries are far off when compared to the empirical library. Even though the immunoHCD model produces a slightly better library when compared to HCDch2, a significant amount of ions are below 0.75, which is often used as a cut-off for the quality of an identification.
+
+```{r}
+#| warning: false
+#| code-fold: true
+#| code-summary: "Show code"
+#| label: fig-dotp
+#| fig-cap: "Dotp values for the PRM dataset analyzed with the three different spectral libraries. Grey line denotes the quality cut-off at 0.75."
+
+#Transform dataframe containing dotp values into long format.
+df_corr_long <- df_corr %>%
+  pivot_longer(cols = c(4:12), names_sep = "_", names_to = c("Metric", "Library"), values_to = "Value") %>%
+  pivot_wider(names_from = Metric, values_from = Value)
+
+df_corr_long$Library <- factor(df_corr_long$Library, levels = c("Empirical", "immunoHCD", "HCDch2"))
+
+#Plot dotp values for all ions, per library used.
+ggplot(df_corr_long) +
+  geom_quasirandom(aes(x = Library, y = `Library Dot Product`, color = Library, fill = Library), pch = 21, size = 3, show.legend = F) +
+  geom_hline(yintercept = 0.75, lty = 2, color = "#5A5A5A") +
+  scale_color_manual(values = c("#FEA82F", "#4D2D52", "#003f5c")) +
+  scale_fill_manual(values = c("#FEA82F4D", "#4D2D524D", "#003f5c4D")) +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18),
+        axis.text = element_text(size = 16, color = "black"))
+```
+
+### Library prediction is negatively affected by post-translational modification and higher charge states
+
+C-terminal amidation and N-terminal pyroglutamation are two highly common post-translational modifications that are quite common in neuropeptides, but are generally not taken into account for proteomics purposes. Interestingly, these two modifications happen to have a large impact on the overall charge state of the peptide at acidic pH (at which most peptide-based LC-MS/MS analyses are performed).
+
+Due to its relatively mild basicity, the proton on the peptide's N-terminal amine is mobile, and can move around along the amide bonds within the peptide [@kinter2000a]. One can hypothesize that N-terminal pyroglutamation severely diminishes this proton mobility, as the significantly more acidic pyrrole ring that is formed will lock the proton firmly in it's place (@fig-PTMs). On the other hand, the peptide C-terminal normally carries no charge at acidic pH. However, the resulting amide group that occurs after C-terminal amidation will likely be positively charged at an acidic pH (@fig-PTMs).
+
+![The effect of N-terminal pyroglutamation and C-terminal amidation on overall peptide charge. The pyrrole ring that is formed in the pyroglutamation reaction locks a proton that otherwise can move around along the peptide amide bonds, while amidation modifies the normally neutral C-terminus into a positively charged one.](PTMs.png){#fig-PTMs}
+
+It is fair to assume that both these modifications have a severe impact on peptide charge and fragmentation pattern, for which the currently available prediction models cannot accommodate. To find out if this is the case for the *C. elegans* neuropeptides, I've plotted the dotp values of the different neuropeptide ions according to their different modifications: amidation, pyroglutamation, amidation & pyroglutamation, or none at all (@fig-dotp_charge_ptm).
+
+```{r}
+#| warning: false
+#| code-fold: true
+#| code-summary: "Show code"
+#| fig-asp: 0.75
+#| label: fig-dotp_charge_ptm
+#| fig-cap: "Dotp values for the PRM dataset analyzed with the three different spectral libraries, split for precursor charge and post-translational modification"
+
+#Set factors.
+df_corr_long$`Precursor Charge` <- as.factor(df_corr_long$`Precursor Charge`)
+df_corr_long$`PTM` <- factor(df_corr_long$`PTM`, levels = c("Pyroglutamation", "Amidation", "Pyroglutamation,\nAmidation", "None"))
+
+
+#Create plot split by charge and PTM.
+ggplot(df_corr_long) +
+  facet_grid(.~PTM) +
+  geom_boxplot(aes(x = `Precursor Charge`, y = `Library Dot Product`, color = Library, fill = Library)) +
+  geom_hline(yintercept = 0.75, lty = 2, color = "#5A5A5A") +
+  scale_color_manual(values = c("#FEA82F", "#4D2D52", "#003f5c")) +
+  scale_fill_manual(values = c("#FEA82F4D", "#4D2D524D", "#003f5c4D")) +
+  theme_classic() +
+  theme(axis.text = element_text(color = "black", size = 16),
+        axis.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        legend.title = element_blank(), 
+        legend.position = "bottom", 
+        strip.text = element_text(size = 14),
+        strip.background = element_rect(fill = "#B4B4B4"))
+```
+
+Pyroglutamation seems to have the most detrimental effect on fragment spectra prediction, with almost no ions having a dotp over 0.75 (@fig-dotp_charge_ptm, first panel). For amidated neuropeptides, the model's predictive success seems to depend on precursor charge, where dotp values drops for amidated neuropeptides with higher charge states (@fig-dotp_charge_ptm, second panel). This could be a consequence of the amidation modification resulting in an additional charge (@fig-PTMs). A combination of both effects is seen for neuropeptides that are pyroglutamated and amidated, where most dotp values are below 0.75, and drop for ions with higher charges (@fig-dotp_charge_ptm, third panel). Although the immunoHCD model performs best for neuropeptides with no modifications at all, it still cannot match the results obtained with an empirical spectral library (@fig-dotp_charge_ptm, last panel). As expected, the HCDch2 model, which is trained on tryptic peptides, performs the worst of all in almost all instances.
+
+## Conclusions
+
+Tools such as MS2PIP are highly beneficial for accurately predicting peptide fragmentation patterns for proteomics workflows. However, for more niche research that does not depend on peptides originating from tryptic digests, predictions are often still flawed. They partially tried to rectify this by including training data that contains non-tryptic peptides, such as immunopeptides.
+
+It seems that just broadening the training data to non-tryptic peptides is not enough, since the "unusual" modification present in (*C. elegans*) neuropeptides were enough to result in unreliable predictions from the models (@fig-dotp_charge_ptm). Hopefully, they will further expand their training datasets, including peptides from various sources beyond tryptic digests and immunopeptides, but also a variety of post-translational modifications.
